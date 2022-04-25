@@ -39,9 +39,12 @@ struct ContentView: View {
         .onAppear(perform: {
             
         })
+        .onTapGesture {
+            hideKeyboard()
+        }
         .navigationTitle("Аунтификация")
         .embedInNavigationView()
-        .navigate(to: TabViewApp(), when: $loginVM.isAuthenticated)
+        .navigate(to: FirstPage(), when: $loginVM.isAuthenticated)
     }
 }
 

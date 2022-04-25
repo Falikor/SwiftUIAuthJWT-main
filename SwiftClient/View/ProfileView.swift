@@ -34,8 +34,8 @@ struct ProfileView: View {
                         //.background(Color(UIColor.lightGray))
             
             Section(header: Text("Основная информация")) {
-                Text("\(exampleVM.accounts?.userDTO?.role ?? "")")
-                Text("\(exampleVM.accounts?.userDTO?.status ?? "")")
+                Text("\(exampleVM.accounts?.userDTO?.studyGroupName ?? "")")
+                Text("\(exampleVM.accounts?.userDTO?.specializationName ?? "")")
             }
             
             Section(header: Text("Хобби")) {

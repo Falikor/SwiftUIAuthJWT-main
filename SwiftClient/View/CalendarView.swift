@@ -40,16 +40,13 @@ struct CalendarView: View {
                 List {
                     ForEach(accountListVM.welcome, id: \.!.summary) { (text) in
                         let date = accountListVM.time(text?.start?.dateTime ?? "")
-                        let now = Date()
-                        if now.isBefore(date) {
                             VStack(alignment: .leading) {
                                 Text("\(date.dayMonthHoursAsStringYearWithSpaces())")
                                 Spacer()
                                 Text("\(text?.summary ?? "")")
                             }
-                        }
                     }
-                }
+                }.state($accountListVM.state)
                 
                 Spacer()
                 

@@ -7,11 +7,33 @@
 
 import SwiftUI
 
+struct tags: View {
+    var tags: Array<String>
+    var body: some View {
+        HStack {
+            ForEach(tags, id: \.self) { e in
+                Button(action: {
+    
+                }) {
+                    Text(e)
+                        .foregroundColor(.blue)
+                        .font(.system(size: 14))
+                        .padding(4)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.blue, lineWidth: 0.5)
+                        )
+                }
+            }
+        }
+    }
+}
+
 struct ExampleOfProgress: View {
     @State var value = 1
-    @StateObject private var exampleVM = ExampleOfProgressViewModels()
+    @StateObject private var exampleVM = ProgressViewModels()
     @State private var info: String = ""
-    
+    var skills = ["Java", "Swift", "JS"]
     var maximum = 6
     var body: some View {
         VStack() {
@@ -24,6 +46,8 @@ struct ExampleOfProgress: View {
                 foto
             } else if self.value == 2 {
                 hobbi
+            } else if self.value == 4 {
+                skils
             }
             Spacer()
         }
@@ -33,6 +57,8 @@ struct ExampleOfProgress: View {
                 self.value = (self.value + 1) % (self.maximum + 1)
             } else {
                 exampleVM.isAuthenticated = true
+                exampleVM.postAccount()
+                RootView.change(to: AnyView(TabViewApp()))
             }
         }) {
             if self.value != 6 {
@@ -47,7 +73,10 @@ struct ExampleOfProgress: View {
         .background(Color.blue)
         .cornerRadius(16)
         }
-        .navigate(to: TabViewApp(), when: $exampleVM.isAuthenticated)
+        //.navigate(to: TabViewApp(), when: $exampleVM.isAuthenticated)
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
     
     var foto: some View {
@@ -60,11 +89,17 @@ struct ExampleOfProgress: View {
     }
     
     var hobbi: some View {
-        TextEditor(text: $info)
+        TextEditor(text: $exampleVM.hobby)
             .lineLimit(20)
-            .frame(width: 345, height: 189, alignment: .leading)
+            .frame(width: 330, height: 189, alignment: .leading)
             .padding()
             .shadow(radius: 1)
+    }
+    
+    var skils: some View {
+        VStack{
+                tags(tags: skills)
+        }
     }
     
     func getString() -> String {

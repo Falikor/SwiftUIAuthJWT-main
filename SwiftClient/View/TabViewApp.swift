@@ -47,11 +47,11 @@ struct TabViewApp: View {
             
             NavigationView {
                 VichenView()
-                    .navigationTitle("Вишетки")
+                    .navigationTitle("ВИШенки")
             }
             .tabItem {
                 Image(systemName: "video.circle.fill")
-                Text("Вишетки")
+                Text("ВИШенки")
             }
             .tag(3)
         }

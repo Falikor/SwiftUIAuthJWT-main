@@ -17,6 +17,12 @@ extension View {
 }
 
 extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+extension View {
     /// Navigate to a new view.
     /// - Parameters:
     ///   - view: View to navigate to.

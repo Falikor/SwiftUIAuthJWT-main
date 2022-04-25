@@ -44,9 +44,10 @@ struct PublicationDTO: Decodable {
 
 // MARK: - UserDTO
 struct UserDTO: Decodable {
-    let id: Int?
-    let email, password, firstName, lastName: String?
-    let role, status: String?
+    let email, firstName, lastName: String?
+    let studyGroupName: String?
+    let courseNumber: Int?
+    let specializationName: String?
 }
 
 // MARK: - WorkExperienceDTO

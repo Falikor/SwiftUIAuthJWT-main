@@ -246,4 +246,31 @@ class Webservice {
             
         }.resume()
     }
+    
+    func postAccount(accountsEdit: AccountEdit, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/edit") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONEncoder().encode(accountsEdit)
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.noData))
+                return
+            }
+            guard let value = String(data: data, encoding: .utf8) else {
+                    print("data is not in UTF-8")
+                    return
+                }
+            completion(.success(value))
+            
+        }.resume()
+    }
 }

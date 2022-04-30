@@ -10,11 +10,11 @@ import Foundation
 // MARK: - AccountEdit
 struct AccountEdit: Encodable {
     var hobby: String?
-    let achievements: String?
-    let publication: [Publication]?
-    let workExperience: [WorkExperience]?
-    let listOfSoftSkills: [ListOfSoftSkill]?
-    let listOfHardSkills: [ListOfHardSkill]?
+    var achievements: String?
+    var publication: [Publication]?
+    var workExperience: [WorkExperience]?
+    var listOfSoftSkills: [ListOfSoftSkill]?
+    var listOfHardSkills: [ListOfHardSkill]?
     
     enum CodingKeys: String, CodingKey {
         case hobby
@@ -48,8 +48,11 @@ struct ListOfSoftSkill: Encodable {
 
 // MARK: - Publication
 struct Publication: Encodable {
-    let link, authors, articleName, publicationDate: String?
-    let journal: String?
+    var link: String?
+    var authors: String?
+    var articleName: String?
+    var publicationDate: String?
+    var journal: String?
     
     enum CodingKeys: String, CodingKey {
         case link
@@ -70,9 +73,13 @@ struct Publication: Encodable {
 }
 
 // MARK: - WorkExperience
-struct WorkExperience: Encodable {
-    let position, responsibilities, company, beginningOfWork: String?
-    let endingOfWork: String?
+struct WorkExperience: Codable {
+    
+    var position: String?
+    var responsibilities: String?
+    var company: String?
+    var beginningOfWork: String?
+    var endingOfWork: String?
     
     enum CodingKeys: String, CodingKey {
         case position

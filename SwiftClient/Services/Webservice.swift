@@ -259,7 +259,8 @@ class Webservice {
         request.addValue("\(token)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = try? JSONEncoder().encode(accountsEdit)
-
+        let jsonData = try? JSONEncoder().encode(accountsEdit)
+        let json = String(data: jsonData!, encoding: String.Encoding.utf8)
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, error == nil else {
                 completion(.failure(.noData))

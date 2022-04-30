@@ -31,6 +31,7 @@ struct tags: View {
 
 struct ExampleOfProgress: View {
     @State var value = 1
+    @State var tap = false
     @StateObject private var exampleVM = ProgressViewModels()
     @State private var info: String = ""
     var skills = ["Java", "Swift", "JS"]
@@ -46,6 +47,8 @@ struct ExampleOfProgress: View {
                 foto
             } else if self.value == 2 {
                 hobbi
+            } else if self.value == 3 {
+                experianse
             } else if self.value == 4 {
                 skils
             }
@@ -87,7 +90,7 @@ struct ExampleOfProgress: View {
         }
 
     }
-    
+    // Экран хобби
     var hobbi: some View {
         TextEditor(text: $exampleVM.hobby)
             .lineLimit(20)
@@ -95,7 +98,47 @@ struct ExampleOfProgress: View {
             .padding()
             .shadow(radius: 1)
     }
+    // Опыт работы
+    var experianse: some View {
+        List {
+            Navigator.navigate(.company(exampleVM.workExperience, exampleVM), content: {
+                VStack {
+                    Text(exampleVM.workExperience.company ?? "Название коании")
+                        .font(.headline)
+                    Text(exampleVM.workExperience.position ?? "Должность")
+                }.padding(7)
+            })
+        }
+        .listStyle(.plain)
+    }
     
+                            /*
+        VStack {
+            Navigator.navigate(.company(exampleVM.workExperience.first), content: {
+                VStack {
+                Text("Название компании")
+                Text("должность")
+                }
+            })
+        }
+        }
+                             
+                             NavigationView {
+                             List(exampleVM.workExperience) { work in
+                                 NavigationLink {
+                                     DetailsView(countryItem: work)
+                                 } label: {
+                                     VStack {
+                                         Text(work.company ?? "Название коании")
+                                             .font(.headline)
+                                         Text(work.position ?? "Должность")
+                                     }.padding(7)
+                                 }
+                             }
+                             }
+                             */
+    
+    // Компетенции
     var skils: some View {
         VStack{
                 tags(tags: skills)
@@ -119,5 +162,11 @@ struct ExampleOfProgress: View {
         default:
             return "Твое фото"
         }
+    }
+}
+
+extension Binding {
+     func toUnwrapped<T>(defaultValue: T) -> Binding<T> where Value == Optional<T>  {
+        Binding<T>(get: { self.wrappedValue ?? defaultValue }, set: { self.wrappedValue = $0 })
     }
 }

@@ -12,8 +12,9 @@ struct SwiftClientApp: App {
     var body: some Scene {
         WindowGroup {
            // TabViewApp()
-             ContentView()
-           // FirstPage()
+            // ContentView()
+              FirstPage()
+           // ExampleOfProgress()
         }
     }
 }

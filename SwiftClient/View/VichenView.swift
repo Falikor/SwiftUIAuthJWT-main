@@ -8,22 +8,52 @@
 import SwiftUI
 
 struct CustomRowView: View {
-    var title: String
+    var title: String?
+    var specializationName: String?
+    var studyGroupName: String?
     var number: Int?
+    @ObservedObject var imageLoader: ImageLoader
+    @State var image: UIImage = UIImage()
+
+    init(withURL url: String?, title: String?, specializationName: String?, studyGroupName: String?, number: Int?) {
+        imageLoader = ImageLoader(urlString: url!)
+        self.title = title
+        self.specializationName = specializationName
+        self.studyGroupName = studyGroupName
+        self.number = number
+    }
+
     var body: some View {
-        HStack {
-            Circle()
-                .frame(width: 40, height: 40)
-                .foregroundColor(.green)
-            VStack(alignment: .leading){
-                Text(title)
-                HStack {
-                    Text("\(number ?? 0)")
-                    Image("cherrySmall")
+        VStack(alignment: .leading) {
+            HStack {
+                if let data = imageLoader.data {
+                    Image(uiImage: image)
+                            .resizable()
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(20)
+                } else {
+                    Circle()
+                        .background(Color.blue)
+                        .frame(width: 40, height: 40)
+                        .cornerRadius(20)
+                    
                 }
+                
+                VStack(alignment: .leading){
+                    Text(title!)
+                    HStack {
+                        Text("\(number ?? 0)")
+                        Image("cherrySmall")
+                    }
+                }
+                .padding(.horizontal, 10)
             }
-            .padding(.horizontal, 10)
+            Text(specializationName ?? "")
+            Text(studyGroupName ?? "")
         }
+        .onReceive(imageLoader.didChange) { data in
+                    self.image = UIImage(data: data) ?? UIImage()
+                }
     }
 }
 
@@ -48,7 +78,7 @@ struct VichenView: View {
                     .frame(width: 118, height: 119)
                     .padding(.all)
             }
-            .shadow(radius: 20)
+            .shadow(color: .black, radius: 20, x: 0, y: 0)
             .padding(.horizontal, 30)
             HStack{
                 Button(action: {
@@ -63,6 +93,10 @@ struct VichenView: View {
                         .padding(.all)
                         .background(Color.white)
                         .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.blue, lineWidth: 0.5)
+                        )
                         .sheet(isPresented: $showHistori, content: {
                             HistoryView()
                         })
@@ -80,20 +114,31 @@ struct VichenView: View {
                         .padding(.all)
                         .background(Color.white)
                         .cornerRadius(16)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.blue, lineWidth: 0.5)
+                        )
                         .sheet(isPresented: $showRulse, content: {
                             RulseView()
                         })
             }
             Spacer()
-            List (exampleVM.top, id: \.!.cherriesTop) { top in
-                CustomRowView(title: exampleVM.fullNameTop(top: top), number: top?.cherriesTop)
+            List (exampleVM.top, id: \.!.email) { top in
+                CustomRowView(
+                    withURL: top!.photoLink, title: exampleVM.fullNameTop(top: top),
+                    specializationName: top?.specializationName,
+                    studyGroupName: top?.studyGroupName,
+                    number: top?.cherriesTop
+                )
             }
+            .listStyle(.plain)
         }
         .onAppear {
             exampleVM.getPostTop()
             exampleVM.getPostSum()
         }
     }
+    
 }
 
 struct VichenView_Previews: PreviewProvider {

@@ -21,7 +21,7 @@ struct FirstPage: View {
                     .foregroundColor(.gray)
                 
                 Button(action: {
-                            
+                    RootView.change(to: AnyView(ExampleOfProgress()))
                     butonTap = true
                             
                         }) {
@@ -36,7 +36,9 @@ struct FirstPage: View {
                         .background(Color.blue)
                         .cornerRadius(16)
             }
-        .navigate(to: ExampleOfProgress(), when: $butonTap)
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
+       // .navigate(to: ExampleOfProgress(), when: $butonTap)
         }
     }
 }

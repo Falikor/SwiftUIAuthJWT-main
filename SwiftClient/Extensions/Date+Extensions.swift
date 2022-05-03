@@ -55,6 +55,13 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    // Example: 1970-12-18
+    public func jsonDate() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = Date.date
+        return dateFormatter.string(from: self)
+    }
+    
     func isBefore(_ date: Date = Date()) -> Bool {
 
         let calendar = Calendar.current

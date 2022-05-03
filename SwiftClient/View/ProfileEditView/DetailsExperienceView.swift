@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DetailsView: View {
+struct DetailsExperienceView: View {
     @StateObject var exampleVM: ProgressViewModels
     var countryItem: WorkExperience
     
@@ -47,13 +47,24 @@ struct DetailsView: View {
         
         Spacer()
         Button(action: {
-            exampleVM.workExperience.company = company
-            exampleVM.workExperience.position = position
-            exampleVM.workExperience.responsibilities = responsibilities
-            exampleVM.workExperience.beginningOfWork = dateBigen.dayMonthShortYearWithDots()
-            exampleVM.workExperience.endingOfWork = today
-            ? dateEnd.dayMonthShortYearWithDots()
-            : "по н.в."
+            if company != "" {
+                exampleVM.workExperience.append(WorkExperience.init(
+                    position: position,
+                    responsibilities: responsibilities,
+                    company: company,
+                    beginningOfWork: dateBigen.jsonDate(),
+                    endingOfWork: today
+                                    ? Date().jsonDate()
+                                    : dateEnd.jsonDate()
+                ))
+                exampleVM.workExperience.removeAll { worck in
+                    if worck.company == nil {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+            }
             
             
         }) {

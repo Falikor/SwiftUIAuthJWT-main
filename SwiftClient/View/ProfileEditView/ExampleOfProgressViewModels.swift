@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import Combine
 
 class ExampleOfProgressViewModels: ObservableObject {
     
@@ -14,6 +16,7 @@ class ExampleOfProgressViewModels: ObservableObject {
     @Published var history: [History?] = []
     @Published var top: [Top?] = []
     @Published var isAuthenticated: Bool = false
+    @Published var image: UIImage?
     
     func getPostHistory() {
         
@@ -90,6 +93,42 @@ class ExampleOfProgressViewModels: ObservableObject {
         }
     }
     
+    func getPhoto() {
+        
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: "jsonwebtoken") else {
+            return
+        }
+        Webservice().getPhoto(token: token) { (result) in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.image = image
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func allSoftSkills() -> String? {
+        var stringArray: [String] = []
+        guard let skills = accounts?.listOfSoftSkillsDTOList else { return nil}
+        for i in skills {
+            stringArray.append(i.softSkill!)
+        }
+        return stringArray.joined(separator: ", ")
+    }
+    
+    func allHardSkills() -> String? {
+        var stringArray: [String] = []
+        guard let skills = accounts?.listOfHardSkillsDTOList else { return nil}
+        for i in skills {
+            stringArray.append(i.hardSkill!)
+        }
+        return stringArray.joined(separator: ", ")
+    }
+    
     func fullName() -> String {
         guard let firstName = accounts?.userDTO?.firstName else { return "" } 
         guard let lastName = accounts?.userDTO?.lastName else { return "" }
@@ -103,4 +142,43 @@ class ExampleOfProgressViewModels: ObservableObject {
         let fullName = firstName + " " + lastName
         return fullName
     }
+}
+
+
+// Получение изображений асинхронно для топ 5
+
+class ImageLoader: ObservableObject {
+    var didChange = PassthroughSubject<Data, Never>()
+    var data = Data() {
+        didSet {
+            didChange.send(data)
+        }
+    }
+
+    init(urlString: String) {
+
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: "jsonwebtoken") else {
+            return
+        }
+        guard let string = URL(string: urlString) else {
+            return
+        }
+        var request = URLRequest(url: string)
+        
+        request.httpMethod = "GET"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+        
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data else { return }
+            DispatchQueue.main.async {
+                self.data = data
+            }
+        }
+        task.resume()
+    }
+}
+
+func imageFromData(_ data:Data) -> UIImage {
+    UIImage(data: data) ?? UIImage()
 }

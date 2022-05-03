@@ -8,21 +8,41 @@
 import SwiftUI
 
 struct tags: View {
-    var tags: Array<String>
+    var tags: Array<AllSkill>
+    @State var tagsTap: [AllSkill] = []
+    @StateObject var exampleVM: ProgressViewModels
     var body: some View {
         HStack {
-            ForEach(tags, id: \.self) { e in
+            ForEach(tags, id: \.self) { tagChose in
                 Button(action: {
-    
+                    if tagsTap.contains(tagChose) {
+                        guard let index = tagsTap.firstIndex(of: tagChose) else { return }
+                        tagsTap.remove(at: index)
+                        exampleVM.tagsTap.remove(at: index)
+                    } else {
+                        tagsTap.append(tagChose)
+                        exampleVM.tagsTap.append(tagChose)
+                    }
                 }) {
-                    Text(e)
-                        .foregroundColor(.blue)
-                        .font(.system(size: 14))
-                        .padding(4)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.blue, lineWidth: 0.5)
-                        )
+                    if tagsTap.contains(tagChose) {
+                        Text(tagChose.rawValue)
+                            .foregroundColor(.white)
+                            .font(.system(size: 14))
+                            .padding(4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color.blue)
+                            )
+                    } else {
+                        Text(tagChose.rawValue)
+                            .foregroundColor(.blue)
+                            .font(.system(size: 14))
+                            .padding(4)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.blue, lineWidth: 0.5)
+                            )
+                    }
                 }
             }
         }
@@ -34,15 +54,23 @@ struct ExampleOfProgress: View {
     @State var tap = false
     @StateObject private var exampleVM = ProgressViewModels()
     @State private var info: String = ""
-    var skills = ["Java", "Swift", "JS"]
+    //image загрузка из галереи
+    @State var showImagePicker: Bool = false
+    @State var image: Image?
+    
+    var skillsSoft = [AllSkill.COMMUNICATIONS, AllSkill.CRITICAL_THINKING, AllSkill.PROJECT_MANAGEMENT]
+    var skillsHard = [AllSkill.JAVA, AllSkill.DATA_SET, AllSkill.PYTHON]
     var maximum = 6
     var body: some View {
+        NavigationView {
         VStack() {
         VStack(alignment: .leading) {
             SegmentedProgressView(value: value, maximum: maximum)
                 .padding(.vertical)
             Text(getString())
                 .frame(alignment: .leading)
+                .font(.headline)
+                .padding(20)
             if self.value == 1 {
                 foto
             } else if self.value == 2 {
@@ -51,6 +79,10 @@ struct ExampleOfProgress: View {
                 experianse
             } else if self.value == 4 {
                 skils
+            } else if self.value == 5 {
+                publication
+            } else if self.value == 6 {
+                achievements
             }
             Spacer()
         }
@@ -61,6 +93,7 @@ struct ExampleOfProgress: View {
             } else {
                 exampleVM.isAuthenticated = true
                 exampleVM.postAccount()
+                exampleVM.getPostImage()
                 RootView.change(to: AnyView(TabViewApp()))
             }
         }) {
@@ -71,10 +104,14 @@ struct ExampleOfProgress: View {
             }
         }
         .frame(height: 30, alignment: .center)
+        //.frame(maxWidth: .infinity, maxHeight: 30)
         .foregroundColor(.white)
-        .padding(.all)
+        .padding()
         .background(Color.blue)
         .cornerRadius(16)
+        }
+        .navigationBarTitle("")
+        .navigationBarHidden(true)
         }
         //.navigate(to: TabViewApp(), when: $exampleVM.isAuthenticated)
         .onTapGesture {
@@ -83,12 +120,24 @@ struct ExampleOfProgress: View {
     }
     
     var foto: some View {
-        Button {
-            print("фото загрузил")
-        } label: {
-            Image("pluse")
+        VStack {
+            Button(action: {
+                withAnimation {
+                    self.showImagePicker.toggle()
+                }
+            }) {
+                if image == nil {
+                    Image("pluse")
+                }
+            }
+            image?.resizable().frame(width: 100, height: 100)
         }
-
+        .sheet(isPresented: $showImagePicker) {
+            OpenGallary(isShown: $showImagePicker, image: $image)
+        }
+        .onDisappear {
+            exampleVM.image = image.asUIImage()
+        }
     }
     // Экран хобби
     var hobbi: some View {
@@ -100,49 +149,71 @@ struct ExampleOfProgress: View {
     }
     // Опыт работы
     var experianse: some View {
-        List {
-            Navigator.navigate(.company(exampleVM.workExperience, exampleVM), content: {
+        VStack(alignment: .leading) {
+            List(exampleVM.workExperience, id: \.company) { exp in
+                Navigator.navigate(.experience(exp, exampleVM), content: {
+                    VStack {
+                        Text(exp.company ?? "Название компании")
+                            .font(.headline)
+                        Text(exp.position ?? "Должность")
+                    }.padding(7)
+                })
+            }
+            .listStyle(.plain)
+            Button {
+                exampleVM.workExperience.append(WorkExperience.init())
+            } label: {
+                HStack {
+                    Image(uiImage: UIImage(named: "add_plue")!)
+                    Text("Добавить место работы")
+                }
+            }
+            .padding(.horizontal, 30)
+        }
+    }
+    
+    // Компетенции
+    var skils: some View {
+        VStack(alignment: .leading) {
+            Text("Soft-skills")
+            tags(tags: skillsSoft, exampleVM: exampleVM)
+            Text("Hard-skills")
+            tags(tags: skillsHard, exampleVM: exampleVM)
+        }
+    }
+    
+    // Опыт работы
+    var publication: some View {
+        VStack(alignment: .leading) {
+        List(exampleVM.publication, id: \.articleName)  { article in
+            Navigator.navigate(.publications(article, exampleVM), content: {
                 VStack {
-                    Text(exampleVM.workExperience.company ?? "Название коании")
+                    Text(article.articleName ?? "Название публикации")
                         .font(.headline)
-                    Text(exampleVM.workExperience.position ?? "Должность")
+                    Text(article.authors ?? "Автор")
                 }.padding(7)
             })
         }
         .listStyle(.plain)
+            Button {
+                exampleVM.publication.append(Publication.init())
+            } label: {
+                HStack {
+                    Image(uiImage: UIImage(named: "add_plue")!)
+                    Text("Добавить новую публикацию")
+                }
+            }
+            .padding(.horizontal, 30)
+        }
     }
     
-                            /*
-        VStack {
-            Navigator.navigate(.company(exampleVM.workExperience.first), content: {
-                VStack {
-                Text("Название компании")
-                Text("должность")
-                }
-            })
-        }
-        }
-                             
-                             NavigationView {
-                             List(exampleVM.workExperience) { work in
-                                 NavigationLink {
-                                     DetailsView(countryItem: work)
-                                 } label: {
-                                     VStack {
-                                         Text(work.company ?? "Название коании")
-                                             .font(.headline)
-                                         Text(work.position ?? "Должность")
-                                     }.padding(7)
-                                 }
-                             }
-                             }
-                             */
-    
-    // Компетенции
-    var skils: some View {
-        VStack{
-                tags(tags: skills)
-        }
+    // Награды и достижения
+    var achievements: some View {
+        TextEditor(text: $exampleVM.achievements)
+            .lineLimit(20)
+            .frame(width: 330, height: 189, alignment: .leading)
+            .padding()
+            .shadow(radius: 1)
     }
     
     func getString() -> String {

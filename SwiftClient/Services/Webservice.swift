@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum AuthenticationError: Error {
     case invalidCredentials
@@ -253,14 +254,24 @@ class Webservice {
             completion(.failure(.invalidURL))
             return
         }
-
+        guard let jsonData = try? JSONEncoder().encode(accountsEdit) else {
+                    print("Error: Trying to convert model to JSON data")
+                    return
+                }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .sortedKeys
+        let data = try? encoder.encode(accountsEdit)
+        
+        if let jsonString = String(data: data!, encoding: .utf8) {
+            print(jsonString)
+          }
+    
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("\(token)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(accountsEdit)
-        let jsonData = try? JSONEncoder().encode(accountsEdit)
-        let json = String(data: jsonData!, encoding: String.Encoding.utf8)
+        request.httpBody = data
+        
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, error == nil else {
                 completion(.failure(.noData))
@@ -273,5 +284,197 @@ class Webservice {
             completion(.success(value))
             
         }.resume()
+    }
+    
+    // MARK: - Получение истории ВИШенок
+    func getPostImage(image: UIImage, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/editPhoto") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        let data = image.jpegData(compressionQuality: 0.0)
+
+        
+        guard let imageData = image.jpegData(compressionQuality: 0.6) else {return}
+        let imageStr = imageData.base64EncodedString()
+        let paramStr: String = "file=@\(imageStr)"
+        let paramData = paramStr.data(using: .utf8)
+        let boundary = generateBoundary()
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        
+        request.httpBody = paramData
+        /*
+        let request = MultipartFormDataRequest(url: url, token: token)
+        request.addDataField(fieldName: "file", fileName: "file", data: data!, mimeType: "image/jpeg")
+    */
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.noData))
+                return
+            }
+            guard let value = String(data: data, encoding: .utf8) else {
+                    print("data is not in UTF-8")
+                    return
+                }
+            completion(.success(value))
+            
+        }.resume()
+    }
+    
+    func generateBoundary() -> String {
+        return "Boundary-\(NSUUID().uuidString)"
+    }
+    
+    
+    static func getPostString(params:[String:Any]) -> String
+        {
+            var data = [String]()
+            for(key, value) in params
+            {
+                data.append(key + "=\(value)")
+            }
+            return data.map { String($0) }.joined(separator: "&")
+        }
+    
+    // MARK: - Получение фото
+    func getPhoto(token: String, completion: @escaping (Result<UIImage, NetworkError>) -> Void) {
+        
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/showPhoto") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        let body = TestRequestBody()
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = try? JSONEncoder().encode(body)
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.noData))
+                return
+            }
+            guard let image = UIImage(data: data) else {
+                    print("data is not in UTF-8")
+                    return
+                }
+            completion(.success(image))
+            
+        }.resume()
+    }
+    
+}
+
+extension Encodable {
+    func toJSONData() throws -> Data {
+        try JSONEncoder().encode(self)
+    }
+}
+
+extension Dictionary {
+    func percentEncoded() -> Data? {
+        return map { key, value in
+            let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            let escapedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            return escapedKey + "=" + escapedValue
+        }
+        .joined(separator: "&")
+        .data(using: .utf8)
+    }
+}
+
+extension CharacterSet {
+    static let urlQueryValueAllowed: CharacterSet = {
+        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        let subDelimitersToEncode = "!$&'()*+,;="
+
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
+        return allowed
+    }()
+}
+
+
+import Foundation
+
+struct MultipartFormDataRequest {
+    private let boundary: String = UUID().uuidString
+    var httpBody = NSMutableData()
+    let url: URL
+    let token: String
+    init(url: URL, token: String) {
+        self.url = url
+        self.token = token
+    }
+    
+    func addTextField(named name: String, value: String) {
+        httpBody.appendString(textFormField(named: name, value: value))
+    }
+    
+    private func textFormField(named name: String, value: String) -> String {
+        var fieldString = "--\(boundary)\r\n"
+        fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
+        fieldString += "Content-Type: text/plain; charset=ISO-8859-1\r\n"
+        fieldString += "Content-Transfer-Encoding: 8bit\r\n"
+        fieldString += "\r\n"
+        fieldString += "\(value)\r\n"
+        
+        return fieldString
+    }
+    
+    
+    func addDataField(fieldName: String, fileName: String, data: Data, mimeType: String) {
+        httpBody.append(dataFormField(fieldName: fieldName,fileName:fileName,data: data, mimeType: mimeType))
+    }
+    
+    private func dataFormField(fieldName: String,
+                               fileName: String,
+                               data: Data,
+                               mimeType: String) -> Data {
+        let fieldData = NSMutableData()
+        
+        fieldData.appendString("--\(boundary)\r\n")
+        fieldData.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; name=\"\(fileName)\"\r\n")
+        fieldData.appendString("Content-Type: \(mimeType)\r\n")
+        fieldData.appendString("\r\n")
+        fieldData.append(data)
+        fieldData.appendString("\r\n")
+        return fieldData as Data
+    }
+    
+    func asURLRequest() -> URLRequest {
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        httpBody.appendString("--\(boundary)--")
+        request.httpBody = httpBody as Data
+        return request
+    }
+}
+
+extension NSMutableData {
+    func appendString(_ string: String) {
+        if let data = string.data(using: .utf8) {
+            self.append(data)
+        }
+    }
+}
+
+
+extension URLSession {
+    func dataTask(with request: MultipartFormDataRequest,
+                  completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void)
+    -> URLSessionDataTask {
+        return dataTask(with: request.asURLRequest(), completionHandler: completionHandler)
     }
 }

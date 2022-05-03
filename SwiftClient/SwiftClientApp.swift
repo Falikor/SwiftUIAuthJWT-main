@@ -11,10 +11,12 @@ import SwiftUI
 struct SwiftClientApp: App {
     var body: some Scene {
         WindowGroup {
-           // TabViewApp()
+             TabViewApp()
+            //
+            
             // ContentView()
-              FirstPage()
-           // ExampleOfProgress()
+            //  FirstPage()
+          //  ExampleOfProgress()
         }
     }
 }

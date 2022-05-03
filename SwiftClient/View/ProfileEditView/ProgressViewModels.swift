@@ -6,19 +6,60 @@
 //
 
 import Foundation
+import SwiftUI
 
 class ProgressViewModels: ObservableObject {
     // хобби
     var hobby: String = ""
+    // награды
+    var achievements: String = ""
     //Опыт работы
-    @Published var workExperience: WorkExperience = WorkExperience.init()
+    @Published var workExperience: [WorkExperience] = [WorkExperience.init()]
+    @Published var publication: [Publication] = [Publication.init()]
     @Published var position: String = ""
     var responsibilities: String = ""
     var company: String = ""
     var beginningOfWork: String = ""
     var endingOfWork: String = ""
-    
+    var tagsTap: [AllSkill] = []
     @Published var isAuthenticated: Bool = false
+    var image: UIImage? = nil
+    
+    func tagHard() -> [ListOfHardSkill]? {
+        var array: [ListOfHardSkill] = []
+        for i in tagsTap {
+            let tag = i.stringEnum(skills: i.rawValue)
+            switch HardSkill(rawValue: i.rawValue) {
+            case .PYTHON:
+                array.append(ListOfHardSkill(hardSkill: tag))
+            case .DATA_SET:
+                array.append(ListOfHardSkill(hardSkill: tag))
+            case .JAVA:
+                array.append(ListOfHardSkill(hardSkill: tag))
+            default:
+                continue
+            }
+        }
+        return array.isEmpty ? nil : array
+    }
+    
+    func tagSoft() -> [ListOfSoftSkill]? {
+        var array: [ListOfSoftSkill] = []
+        for i in tagsTap {
+            let tag = i.stringEnum(skills: i.rawValue)
+            switch SoftSkill(rawValue: i.rawValue) {
+            case .COMMUNICATIONS:
+                array.append(ListOfSoftSkill(softSkill: tag))
+            case .CRITICAL_THINKING:
+                array.append(ListOfSoftSkill(softSkill: tag))
+            case .PROJECT_MANAGEMENT:
+                array.append(ListOfSoftSkill(softSkill: tag))
+            default:
+                continue
+            }
+        }
+        return array.isEmpty ? nil : array
+    }
     
     func postAccount() {
         /*
@@ -29,15 +70,24 @@ class ProgressViewModels: ObservableObject {
         let accountsEdit = AccountEdit(hobby: hobby, achievements: "", publication: publication, workExperience: workExperience, listOfSoftSkills: listOfSoftSkills, listOfHardSkills: listOfHardSkills)
         */
         var hobbySend: String? = nil
+        var achiev: String? = nil
         var work: [WorkExperience]? = nil
+        var publict: [Publication]? = nil
         if hobby != "" {
             hobbySend = hobby
         }
-        if workExperience.company != nil {
-            work = [workExperience]
+        if achievements != "" {
+            achiev = achievements
         }
-
-        let accountsEdit = AccountEdit(hobby: hobbySend, achievements: nil, publication: nil, workExperience: [WorkExperience.init(position: "test", responsibilities: "test", company: "test", beginningOfWork: "test", endingOfWork: "test")], listOfSoftSkills: nil, listOfHardSkills: nil)
+        if workExperience.first?.company != nil {
+            work = workExperience
+        }
+        if publication.first?.articleName != nil {
+            publict = publication
+        }
+        let hardList = tagHard()
+        let softList = tagSoft()
+        let accountsEdit = AccountEdit(hobby: hobbySend, achievements: achiev, publication: publict, workExperience: work, listOfSoftSkills: softList, listOfHardSkills: hardList)
         
         let defaults = UserDefaults.standard
         guard let token = defaults.string(forKey: "jsonwebtoken") else {
@@ -55,4 +105,24 @@ class ProgressViewModels: ObservableObject {
         }
     }
 
+    func getPostImage() {
+        
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: "jsonwebtoken") else {
+            return
+        }
+        guard let image = image else {
+            return
+        }
+        Webservice().getPostImage(image: image, token: token) { (result) in
+            switch result {
+            case .success(let message):
+                DispatchQueue.main.async {
+                    print(message)
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
 }

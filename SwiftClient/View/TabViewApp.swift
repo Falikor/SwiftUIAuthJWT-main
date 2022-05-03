@@ -19,8 +19,8 @@ struct TabViewApp: View {
                     .navigationTitle("Профиль")
             }
             .tabItem {
-                Image(systemName: "person.crop.circle")
-                Text("Профиль")
+                Image(uiImage: UIImage(named: "profile")!)
+               // Text("Профиль")
             }
             .tag(0)
             
@@ -29,8 +29,8 @@ struct TabViewApp: View {
                     .navigationTitle("Новости")
             }
             .tabItem {
-                Image(systemName: "bookmark.circle.fill")
-                Text("Новости")
+                Image(uiImage: UIImage(named: "news")!)
+               // Text("Новости")
             }
             .tag(1)
             
@@ -39,8 +39,8 @@ struct TabViewApp: View {
                     .navigationTitle("Календарь")
             }
             .tabItem {
-                Image(systemName: "house.fill")
-                Text("Календарь")
+                Image(uiImage: UIImage(named: "calendr")!)
+                //Text("Календарь")
             }
             .tag(2)
             
@@ -50,8 +50,8 @@ struct TabViewApp: View {
                     .navigationTitle("ВИШенки")
             }
             .tabItem {
-                Image(systemName: "video.circle.fill")
-                Text("ВИШенки")
+                Image(uiImage: UIImage(named: "achiv")!)
+                //Text("ВИШенки")
             }
             .tag(3)
         }

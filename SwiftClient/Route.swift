@@ -11,7 +11,8 @@ enum Route {
     case geniral(String)
     case createProfil
     case tabView
-    case company(WorkExperience, ProgressViewModels)
+    case experience(WorkExperience, ProgressViewModels)
+    case publications(Publication, ProgressViewModels)
 }
 
 struct Navigator {
@@ -34,9 +35,14 @@ struct Navigator {
                 destination: TabViewApp()) {
                 content()
             })
-        case .company(let countryItem, let exampleVM):
+        case .experience(let countryItem, let exampleVM):
             return AnyView(NavigationLink(
-                destination: DetailsView(exampleVM: exampleVM, countryItem: countryItem)) {
+                destination: DetailsExperienceView(exampleVM: exampleVM, countryItem: countryItem)) {
+                content()
+            })
+        case .publications(let publications, let exampleVM):
+            return AnyView(NavigationLink(
+                destination: DetailsPublicationsView(exampleVM: exampleVM, publications: publications)) {
                 content()
             })
         }

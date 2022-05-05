@@ -15,11 +15,11 @@ struct Account: Decodable {
     let lastName: String?
 */
     let id: Int?
-    let foto, hobby, achievements: String?
-    let publicationDTO: [PublicationDTO]?
-    let workExperienceDTO: [WorkExperienceDTO]?
-    let listOfSoftSkillsDTOList: [ListOfSoftSkillsDTOList]?
-    let listOfHardSkillsDTOList: [ListOfHardSkillsDTOList]?
+    var foto, hobby, achievements: String?
+    var publicationDTO: [PublicationDTO]?
+    var workExperienceDTO: [WorkExperienceDTO]?
+    var listOfSoftSkillsDTOList: [ListOfSoftSkillsDTOList]?
+    var listOfHardSkillsDTOList: [ListOfHardSkillsDTOList]?
     let userDTO: UserDTO?
 }
 

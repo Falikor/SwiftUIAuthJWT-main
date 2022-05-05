@@ -28,7 +28,7 @@ struct ListOfSoftSkill: Codable {
 }
 
 // MARK: - Publication
-struct Publication: Codable {
+struct Publication: Codable, Equatable {
     var link: String?
     var authors: String?
     var articleName: String?
@@ -38,7 +38,7 @@ struct Publication: Codable {
 }
 
 // MARK: - WorkExperience
-struct WorkExperience: Codable {
+struct WorkExperience: Codable, Equatable {
         
     var position: String?
     var responsibilities: String?

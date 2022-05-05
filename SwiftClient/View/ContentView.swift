@@ -15,26 +15,31 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Form {
-                    HStack {
-                        Spacer()
-                        Image(systemName: loginVM.isAuthenticated ? "lock.fill": "lock.open")
-                    }
-                    TextField("Логин", text: $loginVM.email)
-                    SecureField("Пароль", text: $loginVM.password)
-                    HStack {
-                        Spacer()
-                        Button("Войти") {
-                            loginVM.login()
-                        }
-                        Button("Сбросить") {
-                            loginVM.signout()
-                        }
-                        .foregroundColor(.red)
-                        Spacer()
-                    }
-                }.buttonStyle(PlainButtonStyle())
+                Image(uiImage: UIImage(named: "vich")!)
+                
+                TextField("Логин", text: $loginVM.email)
+                    .padding(.horizontal, 30)
+                Divider()
+                    .padding(.horizontal, 20)
+                    .padding()
+                SecureField("Пароль", text: $loginVM.password)
+                    .padding(.horizontal, 30)
+                Divider()
+                    .padding(.horizontal, 20)
+                    .padding()
+                Spacer()
+                Button("Войти") {
+                    loginVM.login()
+                }
+                .frame(minWidth: 0, maxWidth: .infinity)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding(.horizontal, 20)
             }
+            .listStyle(.plain)
+            .navigationBarHidden(true)
         }
         .onAppear(perform: {
             
@@ -42,7 +47,6 @@ struct ContentView: View {
         .onTapGesture {
             hideKeyboard()
         }
-        .navigationTitle("Аунтификация")
         .embedInNavigationView()
         .navigate(to: FirstPage(), when: $loginVM.isAuthenticated)
     }

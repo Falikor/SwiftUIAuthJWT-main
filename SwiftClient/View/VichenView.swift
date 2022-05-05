@@ -14,23 +14,26 @@ struct CustomRowView: View {
     var number: Int?
     @ObservedObject var imageLoader: ImageLoader
     @State var image: UIImage = UIImage()
+    var count: Int
 
-    init(withURL url: String?, title: String?, specializationName: String?, studyGroupName: String?, number: Int?) {
-        imageLoader = ImageLoader(urlString: url!)
+    init(withURL url: String?, title: String?, specializationName: String?, studyGroupName: String?, number: Int?, count: Int) {
+        imageLoader = ImageLoader(urlString: url ?? "")
         self.title = title
         self.specializationName = specializationName
         self.studyGroupName = studyGroupName
         self.number = number
+        self.count = count
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
+                Text("#\(count)")
                 if let data = imageLoader.data {
                     Image(uiImage: image)
                             .resizable()
-                            .frame(width: 40, height: 40)
-                            .cornerRadius(20)
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
                 } else {
                     Circle()
                         .background(Color.blue)
@@ -123,12 +126,13 @@ struct VichenView: View {
                         })
             }
             Spacer()
-            List (exampleVM.top, id: \.!.email) { top in
+            List (exampleVM.top , id: \.!.email) { top in
                 CustomRowView(
                     withURL: top!.photoLink, title: exampleVM.fullNameTop(top: top),
                     specializationName: top?.specializationName,
                     studyGroupName: top?.studyGroupName,
-                    number: top?.cherriesTop
+                    number: top?.cherriesTop,
+                    count: (exampleVM.top.firstIndex(of: top) ?? 0) + 1
                 )
             }
             .listStyle(.plain)

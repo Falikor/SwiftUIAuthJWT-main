@@ -103,12 +103,12 @@ struct ExampleOfProgress: View {
                 Text("Готово")
             }
         }
-        .frame(height: 30, alignment: .center)
-        //.frame(maxWidth: .infinity, maxHeight: 30)
-        .foregroundColor(.white)
+        .frame(minWidth: 0, maxWidth: .infinity)
         .padding()
+        .foregroundColor(.white)
         .background(Color.blue)
-        .cornerRadius(16)
+        .cornerRadius(20)
+        .padding(.horizontal, 20)
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)
@@ -150,7 +150,8 @@ struct ExampleOfProgress: View {
     // Опыт работы
     var experianse: some View {
         VStack(alignment: .leading) {
-            List(exampleVM.workExperience, id: \.company) { exp in
+            List {
+            ForEach(exampleVM.workExperience, id: \.company) { exp in
                 Navigator.navigate(.experience(exp, exampleVM), content: {
                     VStack {
                         Text(exp.company ?? "Название компании")
@@ -158,6 +159,7 @@ struct ExampleOfProgress: View {
                         Text(exp.position ?? "Должность")
                     }.padding(7)
                 })
+            }.onDelete(perform: deleteWorck)
             }
             .listStyle(.plain)
             Button {
@@ -185,16 +187,18 @@ struct ExampleOfProgress: View {
     // Опыт работы
     var publication: some View {
         VStack(alignment: .leading) {
-        List(exampleVM.publication, id: \.articleName)  { article in
-            Navigator.navigate(.publications(article, exampleVM), content: {
-                VStack {
-                    Text(article.articleName ?? "Название публикации")
-                        .font(.headline)
-                    Text(article.authors ?? "Автор")
-                }.padding(7)
-            })
-        }
-        .listStyle(.plain)
+            List {
+                ForEach(exampleVM.publication, id: \.articleName)  { article in
+                    Navigator.navigate(.publications(article, exampleVM), content: {
+                        VStack {
+                            Text(article.articleName ?? "Название публикации")
+                                .font(.headline)
+                            Text(article.authors ?? "Автор")
+                        }.padding(7)
+                    })
+                }.onDelete(perform: deletePublic)
+            }
+            .listStyle(.plain)
             Button {
                 exampleVM.publication.append(Publication.init())
             } label: {
@@ -233,6 +237,14 @@ struct ExampleOfProgress: View {
         default:
             return "Твое фото"
         }
+    }
+    
+    private func deleteWorck(with indexSet: IndexSet) {
+        indexSet.forEach { exampleVM.workExperience.remove(at: $0) }
+    }
+    
+    private func deletePublic(with indexSet: IndexSet) {
+        indexSet.forEach { exampleVM.publication.remove(at: $0) }
     }
 }
 

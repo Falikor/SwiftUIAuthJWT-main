@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import PDFKit
 
 class ExampleOfProgressViewModels: ObservableObject {
     
@@ -17,6 +18,35 @@ class ExampleOfProgressViewModels: ObservableObject {
     @Published var top: [Top?] = []
     @Published var isAuthenticated: Bool = false
     @Published var image: UIImage?
+    @Published var pdfView: URL?
+    @Published var showPdf: Bool = false
+    
+    func getHardSkils() -> [AllSkill] {
+        var tagsTaps: [AllSkill] = []
+        for i in AllSkill.allCases {
+            guard let hardSkils = accounts?.listOfHardSkillsDTOList else { return [] }
+            for b in hardSkils {
+                if String(describing: i) == b.hardSkill {
+                    tagsTaps.append(i)
+                }
+            }
+        }
+        return tagsTaps
+    }
+    
+    func getSoftSkils() -> [AllSkill] {
+        var tagsTaps: [AllSkill] = []
+        for i in AllSkill.allCases {
+            guard let softSkill = accounts?.listOfSoftSkillsDTOList else { return [] }
+            for b in softSkill {
+                if String(describing: i) == b.softSkill {
+                    tagsTaps.append(i)
+                }
+            }
+        }
+        return tagsTaps
+    }
+
     
     func getPostHistory() {
         
@@ -111,11 +141,40 @@ class ExampleOfProgressViewModels: ObservableObject {
         }
     }
     
+    func getPdfResume() {
+        
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: "jsonwebtoken") else {
+            return
+        }
+        Webservice().getPdfFile(token: token) { (result) in
+            switch result {
+            case .success(let pdf):
+                DispatchQueue.main.async {
+                    //pdf
+                    self.pdfView = pdf
+                    self.showPdf = true
+                    print("success")
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     func allSoftSkills() -> String? {
         var stringArray: [String] = []
         guard let skills = accounts?.listOfSoftSkillsDTOList else { return nil}
-        for i in skills {
-            stringArray.append(i.softSkill!)
+        var tagsTaps: [AllSkill] = []
+        for i in AllSkill.allCases {
+            for b in skills {
+                if String(describing: i) == b.softSkill {
+                    tagsTaps.append(i)
+                }
+            }
+        }
+        for i in tagsTaps {
+            stringArray.append(i.rawValue)
         }
         return stringArray.joined(separator: ", ")
     }
@@ -123,8 +182,16 @@ class ExampleOfProgressViewModels: ObservableObject {
     func allHardSkills() -> String? {
         var stringArray: [String] = []
         guard let skills = accounts?.listOfHardSkillsDTOList else { return nil}
-        for i in skills {
-            stringArray.append(i.hardSkill!)
+        var tagsTaps: [AllSkill] = []
+        for i in AllSkill.allCases {
+            for b in skills {
+                if String(describing: i) == b.hardSkill {
+                    tagsTaps.append(i)
+                }
+            }
+        }
+        for i in tagsTaps {
+            stringArray.append(i.rawValue)
         }
         return stringArray.joined(separator: ", ")
     }

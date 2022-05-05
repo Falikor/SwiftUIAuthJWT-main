@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import Alamofire
+import PDFKit
 
 enum AuthenticationError: Error {
     case invalidCredentials
@@ -288,48 +290,30 @@ class Webservice {
     
     // MARK: - Получение истории ВИШенок
     func getPostImage(image: UIImage, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
-        
-        guard let url = URL(string: "http://193.17.52.134:80/api/v1/editPhoto") else {
-            completion(.failure(.invalidURL))
+
+        let headers: HTTPHeaders = [
+                    "Authorization": "\(token)",
+                    "Content-type": "multipart/form-data"
+                ]
+        // проверка на то что image хоть какойто есть так как по дефолту image не nil
+        if image.size.height == .zero {
             return
         }
-        
-        let data = image.jpegData(compressionQuality: 0.0)
+        guard let imageNewSize = image.image(scaledTo: .init(width: 300, height: 300)) else {return}
+        guard let imageData = imageNewSize.jpegData(compressionQuality: 0.0) else {return}
+        // application/form-data
+      //  let parameters: [String: String] = ["file": "value"]
+        AF.upload(
+                        multipartFormData: { multipartFormData in
+                            multipartFormData.append(imageData, withName: "file" , fileName: "Elon_Musk_Royal_Society.jpeg", mimeType: "image/jpeg")
+                    },
+                        to: "http://193.17.52.134:80/api/v1/editPhoto", method: .post , headers: headers)
+                        .response { resp in
+                            print(resp)
 
-        
-        guard let imageData = image.jpegData(compressionQuality: 0.6) else {return}
-        let imageStr = imageData.base64EncodedString()
-        let paramStr: String = "file=@\(imageStr)"
-        let paramData = paramStr.data(using: .utf8)
-        let boundary = generateBoundary()
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
-        request.httpBody = paramData
-        /*
-        let request = MultipartFormDataRequest(url: url, token: token)
-        request.addDataField(fieldName: "file", fileName: "file", data: data!, mimeType: "image/jpeg")
-    */
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let data = data, error == nil else {
-                completion(.failure(.noData))
-                return
-            }
-            guard let value = String(data: data, encoding: .utf8) else {
-                    print("data is not in UTF-8")
-                    return
-                }
-            completion(.success(value))
-            
-        }.resume()
+                    }
     }
     
-    func generateBoundary() -> String {
-        return "Boundary-\(NSUUID().uuidString)"
-    }
     
     
     static func getPostString(params:[String:Any]) -> String
@@ -369,6 +353,41 @@ class Webservice {
             completion(.success(image))
             
         }.resume()
+    }
+    
+    func getPdfFile (token: String, completion: @escaping (Result<URL?, NetworkError>) -> Void) {
+        
+        
+        let headers: HTTPHeaders = [
+            "Authorization": "\(token)",
+            "Accept": "application/pdf",
+            "Content-Type": "application/pdf",
+        ]
+        
+        let destination: DownloadRequest.Destination = { _ , _ in
+                    
+                    let documentURLs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                    
+                    let fileURL = documentURLs.appendingPathComponent("RandomFile\(Int.random(in: 1..<10000)).pdf")
+                    return (fileURL, [.removePreviousFile, .createIntermediateDirectories])
+                    
+                }
+                
+        AF.download(URL(string: "http://193.17.52.134:80/api/v1/pdf/resume")!, method: .get, headers: headers, to: destination).downloadProgress(closure: { (progress) in
+                    
+                }).validate()
+                    .response {response in
+                        
+                        if response.error == nil {
+                            debugPrint(response)
+                         //   completion(nil)
+                            completion(.success(response.fileURL))
+                        }
+                        else {
+                            print("error")
+                           // completion(response.error)
+                        }
+                    }
     }
     
 }

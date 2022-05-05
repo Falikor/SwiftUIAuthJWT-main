@@ -13,6 +13,9 @@ enum Route {
     case tabView
     case experience(WorkExperience, ProgressViewModels)
     case publications(Publication, ProgressViewModels)
+    case hobby(ExampleOfProgressViewModels)
+    case achievements(ExampleOfProgressViewModels)
+    case worckExperience(WorkExperienceDTO, ExampleOfProgressViewModels)
 }
 
 struct Navigator {
@@ -43,6 +46,21 @@ struct Navigator {
         case .publications(let publications, let exampleVM):
             return AnyView(NavigationLink(
                 destination: DetailsPublicationsView(exampleVM: exampleVM, publications: publications)) {
+                content()
+            })
+        case .hobby(let exampleVM):
+            return AnyView(NavigationLink(
+                destination: HobbyView(exampleVM: exampleVM)) {
+                content()
+            })
+        case .achievements(let exampleVM):
+            return AnyView(NavigationLink(
+                destination: AchievementsView(exampleVM: exampleVM)) {
+                content()
+            })
+        case .worckExperience(let workExperienceDTO, let exampleVM):
+            return AnyView(NavigationLink(
+                destination: ExperienceView(workExperienceDTO: workExperienceDTO, exampleVM: exampleVM)) {
                 content()
             })
         }

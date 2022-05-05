@@ -70,11 +70,12 @@ struct DetailsExperienceView: View {
         }) {
                 Text("Сохранить")
         }
-        .frame(height: 30, alignment: .center)
+        .frame(minWidth: 0, maxWidth: .infinity)
+        .padding()
         .foregroundColor(.white)
-        .padding(.all)
         .background(Color.blue)
-        .cornerRadius(16)
+        .cornerRadius(20)
+        .padding(.horizontal, 20)
         
     }
 }

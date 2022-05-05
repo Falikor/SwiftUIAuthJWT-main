@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum AllSkill: String {
+public enum AllSkill: String, CaseIterable {
     case COMMUNICATIONS = "КОММУНИКАЦИИ"
     case CRITICAL_THINKING = "КРИТИЧЕСКОЕ МЫШЛЕНИЕ"
     case PROJECT_MANAGEMENT = "УПРАВЛЕНИЕ ПРОЕКТАМИ"

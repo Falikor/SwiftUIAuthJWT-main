@@ -9,8 +9,8 @@ import Foundation
 
 class LoginViewModel: ObservableObject {
     
-    var email: String = ""
-    var password: String = ""
+    @Published var email: String = ""
+    @Published var password: String = ""
     @Published var isAuthenticated: Bool = false
     @Published var token: String = ""
     

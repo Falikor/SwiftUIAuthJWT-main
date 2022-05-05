@@ -9,14 +9,16 @@ import SwiftUI
 
 @main
 struct SwiftClientApp: App {
+    @StateObject var exampleVM = ExampleOfProgressViewModels()
     var body: some Scene {
         WindowGroup {
-             TabViewApp()
+            //  TabViewApp()
             //
-            
+        
+          //  ContentView()
             // ContentView()
-            //  FirstPage()
-          //  ExampleOfProgress()
+              FirstPage()
+           // ExampleOfProgress()
         }
     }
 }

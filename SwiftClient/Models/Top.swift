@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Top: Decodable {
+struct Top: Decodable, Equatable {
     let email, firstName, lastName: String?
     let cherriesTop: Int?
     let studyGroupName: String?
@@ -16,3 +16,7 @@ struct Top: Decodable {
     let photoLink: String
  }
 
+
+struct OrderUpload: Codable {
+    let file: Data
+}

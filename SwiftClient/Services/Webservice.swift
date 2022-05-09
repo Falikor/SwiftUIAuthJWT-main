@@ -250,6 +250,7 @@ class Webservice {
         }.resume()
     }
     
+    
     func postAccount(accountsEdit: AccountEdit, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
         
         guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/edit") else {
@@ -288,7 +289,7 @@ class Webservice {
         }.resume()
     }
     
-    // MARK: - Получение истории ВИШенок
+    // MARK: - Получение фото в резюме
     func getPostImage(image: UIImage, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
 
         let headers: HTTPHeaders = [
@@ -333,13 +334,11 @@ class Webservice {
             completion(.failure(.invalidURL))
             return
         }
-        let body = TestRequestBody()
+        
         var request = URLRequest(url: url)
         
-        request.httpMethod = "POST"
+        request.httpMethod = "GET"
         request.addValue("\(token)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONEncoder().encode(body)
 
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             guard let data = data, error == nil else {
@@ -351,6 +350,33 @@ class Webservice {
                     return
                 }
             completion(.success(image))
+            
+        }.resume()
+    }
+    
+    // MARK: - Первый ли вход?
+    func getFistExit(token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
+        
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/first_enter") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.noData))
+                return
+            }
+            guard let string = String(data: data, encoding: .utf8) else {
+                print("data is not in UTF-8")
+                return
+            }
+            completion(.success(string))
             
         }.resume()
     }

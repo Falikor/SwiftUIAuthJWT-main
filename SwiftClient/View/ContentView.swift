@@ -30,6 +30,7 @@ struct ContentView: View {
                 Spacer()
                 Button("Войти") {
                     loginVM.login()
+                    loginVM.loginFistexet()
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .padding()
@@ -49,6 +50,7 @@ struct ContentView: View {
         }
         .embedInNavigationView()
         .navigate(to: FirstPage(), when: $loginVM.isAuthenticated)
+        .navigate(to: TabViewApp(), when: $loginVM.isFistExet)
     }
 }
 

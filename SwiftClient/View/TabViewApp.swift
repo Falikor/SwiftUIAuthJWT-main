@@ -16,7 +16,8 @@ struct TabViewApp: View {
             
             NavigationView {
                 ProfileView()
-                    .navigationTitle("Профиль")
+                   // .navigationTitle("Профиль")
+                    .navigationBarHidden(true)
             }
             .tabItem {
                 Image(uiImage: UIImage(named: "profile")!)

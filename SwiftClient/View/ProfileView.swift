@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UIKit
+import PDFKit
 
 // ячейка для опыта и достижений
 struct CellProfileView: View {
@@ -20,15 +21,22 @@ struct CellProfileView: View {
                 Image(uiImage: UIImage(named: "icon_profil")!)
                 Text(title)
                     .font(.headline)
+                    .font(.system(size: 16))
+                    .foregroundColor(Color.black)
             }
             .padding(5)
             if let subTitle = subTitle {
                 Text(subTitle)
                     .padding(5)
+                    .font(.system(size: 14))
+                    .foregroundColor(Color.black)
+                    .foregroundColor(Color.black)
             }
             Text(sububTitle)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(5)
+                .font(.system(size: 14))
+                .foregroundColor(Color.black)
         }
         .padding(5)
     }
@@ -53,27 +61,24 @@ struct ProfileView: View {
     @State var selectedItemPublisht: PublicationDTO = PublicationDTO.init(id: nil, link: nil, authors: nil, articleName: nil, publicationDate: nil, journal: nil)
     
     var body: some View {
-        
         List {
-            Group {
+            Section {
             person
-            Divider()
             }
-            Group {
+            Section {
             infoForPerson
-            Divider()
             }
             // MARK: Хобби
-            Group {
+            Section {
             hobby
             }
             // MARK: Опыт работы
-            Group {
-                Divider()
+            Section {
             HStack(spacing: 5) {
                 Image(uiImage: UIImage(named: "icon_profil")!)
                 Text("Опыт работы")
                     .font(.headline)
+                    .font(.system(size: 16))
             }
             ForEach(exampleVM.accounts?.workExperienceDTO ??
                     [WorkExperienceDTO.init(id: nil,
@@ -88,8 +93,15 @@ struct ProfileView: View {
                 } label: {
                     VStack(alignment: .leading) {
                         Text(dataItem.company ?? "Название компании")
-                            .font(.headline)
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 13))
                         Text(dataItem.position ?? "Должность")
+                            .foregroundColor(Color.black)
+                            .font(.system(size: 16))
+                        Divider()
+                        Text(exampleVM.getDataStartEndWorck(dto: dataItem) ?? "")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 13))
                     }.padding(7)
                 }
             }.onDelete(perform: deleteWorck)
@@ -106,21 +118,19 @@ struct ProfileView: View {
                 }
             }
             .padding(.horizontal, 30)
-                Divider()
             }
             
             // MARK: Soft-skills работы
-            
+            Section {
             softSkills
-            
+            }
             // MARK: Hard-skills работы
-            
+            Section {
             hardSkills
-            
+            }
             // MARK: Публикации
             
-            Group {
-                Divider()
+            Section {
                 HStack(spacing: 5) {
                     Image(uiImage: UIImage(named: "icon_profil")!)
                     Text("Публикации")
@@ -140,12 +150,15 @@ struct ProfileView: View {
                     
                     Button {
                         selectedItemPublisht = dataItem
-                        isActivated = true
+                        isActivatedSoftPublic = true
                     } label: {
                         VStack(alignment: .leading) {
                             Text(dataItem.articleName ?? "Название статьи")
-                                .font(.headline)
+                                .foregroundColor(Color.black)
+                                .font(.system(size: 16))
                             Text(dataItem.authors ?? "Авторы")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 13))
                         }.padding(7)
                     }
                 }.onDelete(perform: deletePublic)
@@ -162,15 +175,16 @@ struct ProfileView: View {
                 }
             }
             .padding(.horizontal, 30)
-                Divider()
             }
             
             // MARK: Достижения
-            
+            Section {
             achivements
+            }
         
         }
-        .listStyle(.plain)
+        .listStyle(GroupedListStyle())
+        .navigationBarHidden(true)
         .onAppear {
             UITableView.appearance().separatorColor = .clear
             exampleVM.getPhoto()
@@ -183,9 +197,20 @@ struct ProfileView: View {
             VStack {
                 HStack {
                     // загрузга новой картинки
-                    Image(systemName: "arrowshape.turn.up.backward.circle")
+                    Button {
+                        exampleVM.getPdfResume(action: "send")
+                    } label: {
+                        Image(systemName: "arrowshape.turn.up.backward.circle")
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .sheet(isPresented: $exampleVM.sendPdf, onDismiss: {
+                                print("Dismiss")
+                            }, content: {
+                                
+                                ActivityViewController(itemsToShare: [ exampleVM.pdfView ?? URL(string: "https://rut.digital/")!])
+                            })
+                    
                     // загрузга новой картинки
-                    /*
                     Button {
                         withAnimation {
                             self.showImagePicker.toggle()
@@ -197,27 +222,31 @@ struct ProfileView: View {
                             .cornerRadius(50)
                             .padding()
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $showImagePicker) {
                         OpenGallary(isShown: $showImagePicker, image: $image)
                     }
                     .onDisappear {
-                        exampleVM.image = image.asUIImage()
+                        postViewModel.image = image.asUIImage()
+                        postViewModel.postAccount()
                         postViewModel.getPostImage()
                     }
-                    */
+                    /*
                     Image(uiImage: ((exampleVM.image ?? UIImage(named: "ilonMask"))!))
                         .resizable()
                         .frame(width: 100, height: 100)
                         .cornerRadius(50)
                         .padding()
-                    
+                    */
                     Button {
-                        exampleVM.getPdfResume()
+                        exampleVM.getPdfResume(action: "show")
                     } label: {
                         Image(systemName: "doc.circle")
                     }
+                    .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $exampleVM.showPdf, content: {
-                        WebView(type: .local, url: "\(exampleVM.pdfView!)")
+                        PDFKitRepresentedView(exampleVM.pdfView!)
+                      //  WebView(type: .local, url: "\(exampleVM.pdfView!)")
                     })
                     
                 }

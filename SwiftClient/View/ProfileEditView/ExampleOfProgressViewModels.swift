@@ -20,6 +20,7 @@ class ExampleOfProgressViewModels: ObservableObject {
     @Published var image: UIImage?
     @Published var pdfView: URL?
     @Published var showPdf: Bool = false
+    @Published var sendPdf: Bool = false
     
     func getHardSkils() -> [AllSkill] {
         var tagsTaps: [AllSkill] = []
@@ -32,6 +33,16 @@ class ExampleOfProgressViewModels: ObservableObject {
             }
         }
         return tagsTaps
+    }
+    
+    func getDataStartEndWorck(dto: WorkExperienceDTO?) -> String? {
+        guard let start = dto?.beginningOfWork else { return nil}
+        guard let end = dto?.endingOfWork else { return nil}
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let dateStart = dateFormatter.date(from: start) else { return nil}
+        guard let dateEnd = dateFormatter.date(from: end) else { return nil}
+        return "С \(dateStart.dayMonthWithDots()) по \(dateEnd.dayMonthWithDots())"
     }
     
     func getSoftSkils() -> [AllSkill] {
@@ -67,6 +78,7 @@ class ExampleOfProgressViewModels: ObservableObject {
         }
         
     }
+    
     
     
     func getPostAccount() {
@@ -141,7 +153,7 @@ class ExampleOfProgressViewModels: ObservableObject {
         }
     }
     
-    func getPdfResume() {
+    func getPdfResume(action: String) {
         
         let defaults = UserDefaults.standard
         guard let token = defaults.string(forKey: "jsonwebtoken") else {
@@ -153,7 +165,11 @@ class ExampleOfProgressViewModels: ObservableObject {
                 DispatchQueue.main.async {
                     //pdf
                     self.pdfView = pdf
-                    self.showPdf = true
+                    if action == "send" {
+                        self.sendPdf = true
+                    } else if action == "show" {
+                        self.showPdf = true
+                    }
                     print("success")
                 }
             case .failure(let error):

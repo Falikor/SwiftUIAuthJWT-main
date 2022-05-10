@@ -52,6 +52,7 @@
 		CDBD92882823D3A600DF2168 /* HardSkillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD92872823D3A600DF2168 /* HardSkillsView.swift */; };
 		CDBD928A2823E5E800DF2168 /* SofttSkillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD92892823E5E800DF2168 /* SofttSkillsView.swift */; };
 		CDBD928C2823E84600DF2168 /* PublicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD928B2823E84600DF2168 /* PublicationView.swift */; };
+		CDBD929228291F4600DF2168 /* PdfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD929128291F4600DF2168 /* PdfView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +104,7 @@
 		CDBD92872823D3A600DF2168 /* HardSkillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardSkillsView.swift; sourceTree = "<group>"; };
 		CDBD92892823E5E800DF2168 /* SofttSkillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SofttSkillsView.swift; sourceTree = "<group>"; };
 		CDBD928B2823E84600DF2168 /* PublicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicationView.swift; sourceTree = "<group>"; };
+		CDBD929128291F4600DF2168 /* PdfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfView.swift; sourceTree = "<group>"; };
 		DC1105D467863858B9A4BB4A /* libPods-SwiftClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -179,6 +181,7 @@
 				CD5D6B3E27EE0B1600709710 /* SegmentedProgressView.swift */,
 				CDAD3132280C519F00ADFA3A /* RootView.swift */,
 				CD2998EA2815B64500DF66BA /* StatefulScreenView.swift */,
+				CDBD929128291F4600DF2168 /* PdfView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -294,6 +297,8 @@
 			dependencies = (
 			);
 			name = SwiftClient;
+			packageProductDependencies = (
+			);
 			productName = SwiftClient;
 			productReference = 8D1C1C422625ED780026A45A /* SwiftClient.app */;
 			productType = "com.apple.product-type.application";
@@ -321,6 +326,8 @@
 				Base,
 			);
 			mainGroup = 8D1C1C392625ED780026A45A;
+			packageReferences = (
+			);
 			productRefGroup = 8D1C1C432625ED780026A45A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -384,6 +391,7 @@
 				CD5BFBFA27E61DE1009D0ACD /* AfichaView.swift in Sources */,
 				CDAD3133280C519F00ADFA3A /* RootView.swift in Sources */,
 				CD0CF3F9281EED4000EF8B1B /* OpenGallary.swift in Sources */,
+				CDBD929228291F4600DF2168 /* PdfView.swift in Sources */,
 				CD1872FE2805F18E00A91E09 /* Top.swift in Sources */,
 				CDBD92862823A45500DF2168 /* ExperienceView.swift in Sources */,
 				CDAC28D22801F200006E1FB5 /* History.swift in Sources */,
@@ -548,7 +556,7 @@
 				DEVELOPMENT_TEAM = 6L2236X539;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -573,7 +581,7 @@
 				DEVELOPMENT_TEAM = 6L2236X539;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

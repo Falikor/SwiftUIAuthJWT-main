@@ -19,7 +19,7 @@ struct CalendarView: View {
                 Picker("", selection: $selectedColor) {
                     ForEach(colors, id: \.self) { text in
                         Text(text)
-                            .onAppear {
+                            .onDisappear(perform: {
                                 switch text {
                                 case "ШАД-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad111@rut.digital/events?key=AIzaSyAlX_gpRSI_SB4FzrRDuXWC3wkhR8_8SyI")
                                 case "ШАД-112": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad112@rut.digital/events?key=AIzaSyCdbVwirC2irWFIcCXPiXtL-a-fE6vPkIo")
@@ -32,7 +32,8 @@ struct CalendarView: View {
                                 default:
                                     break
                                 }
-                            }
+                            })
+                            
                         
                     }
                 }

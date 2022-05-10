@@ -243,6 +243,7 @@ class Webservice {
             }
             guard let value = String(data: data, encoding: .utf8) else {
                     print("data is not in UTF-8")
+                    completion(.failure(.decodingError))
                     return
                 }
             completion(.success(value))

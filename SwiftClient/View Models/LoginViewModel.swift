@@ -14,9 +14,10 @@ class LoginViewModel: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var token: String = ""
     @Published var isFistExet: Bool = false
+    @Published var state: ScreenViewState = .loaded
     
     func login() {
-        
+        self.state = .loading
         let defaults = UserDefaults.standard
         
         Webservice().login(email: email, password: password) { result in
@@ -26,30 +27,26 @@ class LoginViewModel: ObservableObject {
                     DispatchQueue.main.async {
                         self.isAuthenticated = true
                         self.token = token
+                        
+                        Webservice().getFistExit(token: token) { (result) in
+                            switch result {
+                            case .success(let isFistExet):
+                                DispatchQueue.main.async {
+                                    //pdf
+                                    self.isFistExet = Bool(isFistExet) ?? false
+                                    print("success")
+                                    self.state = .loaded
+                                }
+                            case .failure(let error):
+                                print(error.localizedDescription)
+                                self.state = .loaded
+                            }
+                        }
+
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
-            }
-        }
-    }
-    
-    
-    func loginFistexet() {
-        
-        let defaults = UserDefaults.standard
-        guard let token = defaults.string(forKey: "jsonwebtoken") else {
-            return
-        }
-        Webservice().getFistExit(token: token) { (result) in
-            switch result {
-            case .success(let isFistExet):
-                DispatchQueue.main.async {
-                    //pdf
-                    self.isFistExet = Bool(isFistExet) ?? false
-                    print("success")
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
+                    self.state = .loaded
             }
         }
     }

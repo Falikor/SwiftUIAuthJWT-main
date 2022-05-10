@@ -76,22 +76,28 @@ struct VichenView: View {
                         .foregroundColor(.blue)
                         .font(.system(size: 60))
                 }
+                .padding()
                 Spacer(minLength: 40)
                 Image("cherry")
                     .frame(width: 118, height: 119)
-                    .padding(.all)
             }
-            .shadow(color: .black, radius: 20, x: 0, y: 0)
-            .padding(.horizontal, 30)
+            .background(Color.white)
+
+            .clipped().cornerRadius(8)
+            .shadow(color: Color.black, radius: 5, x: 0, y: 0)
+            .padding(.horizontal, 20)
+            
+            
             HStack{
                 Button(action: {
                     showHistori = true
                         }) {
                             Text("История")
                                 .font(.body)
+                                .frame(alignment: .center)
                             
                         }
-                        .frame(height: 30, alignment: .center)
+                        .frame(minWidth: 0, maxWidth: .infinity)
                         .foregroundColor(.blue)
                         .padding(.all)
                         .background(Color.white)
@@ -99,6 +105,7 @@ struct VichenView: View {
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.blue, lineWidth: 0.5)
+                                .padding(.leading, 20)
                         )
                         .sheet(isPresented: $showHistori, content: {
                             HistoryView()
@@ -110,9 +117,10 @@ struct VichenView: View {
                             
                             Text("Правила")
                                 .font(.body)
+                                .frame(alignment: .center)
                             
                         }
-                        .frame(height: 30, alignment: .center)
+                        .frame(minWidth: 0, maxWidth: .infinity)
                         .foregroundColor(.blue)
                         .padding(.all)
                         .background(Color.white)
@@ -120,10 +128,12 @@ struct VichenView: View {
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
                                 .stroke(Color.blue, lineWidth: 0.5)
-                        )
+                                .padding(.trailing, 20)
+                        )                            
                         .sheet(isPresented: $showRulse, content: {
                             RulseView()
                         })
+                
             }
             Spacer()
             List (exampleVM.top , id: \.!.email) { top in

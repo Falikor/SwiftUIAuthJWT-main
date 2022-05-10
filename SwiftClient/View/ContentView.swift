@@ -30,7 +30,14 @@ struct ContentView: View {
                 Spacer()
                 Button("Войти") {
                     loginVM.login()
-                    loginVM.loginFistexet()
+               //     loginVM.loginFistexet()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                    if loginVM.isAuthenticated && !loginVM.isFistExet {
+                        RootView.change(to: AnyView(FirstPage()))
+                    } else if loginVM.isAuthenticated && loginVM.isFistExet {
+                        RootView.change(to: AnyView(TabViewApp()))
+                    }
+                    }
                 }
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .padding()
@@ -40,8 +47,9 @@ struct ContentView: View {
                 .padding(.horizontal, 20)
             }
             .listStyle(.plain)
-            .navigationBarHidden(true)
+            .state($loginVM.state)
         }
+        .navigationBarHidden(true)
         .onAppear(perform: {
             
         })
@@ -49,8 +57,6 @@ struct ContentView: View {
             hideKeyboard()
         }
         .embedInNavigationView()
-        .navigate(to: FirstPage(), when: $loginVM.isAuthenticated)
-        .navigate(to: TabViewApp(), when: $loginVM.isFistExet)
     }
 }
 

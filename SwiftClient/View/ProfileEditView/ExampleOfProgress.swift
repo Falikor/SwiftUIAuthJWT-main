@@ -99,16 +99,22 @@ struct ExampleOfProgress: View {
         }) {
             if self.value != 6 {
                 Text("Продолжить")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 20)
             } else {
                 Text("Готово")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 20)
             }
         }
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .padding()
-        .foregroundColor(.white)
-        .background(Color.blue)
-        .cornerRadius(20)
-        .padding(.horizontal, 20)
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)

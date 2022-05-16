@@ -55,11 +55,57 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    public func hoursMinutseWithSpaces() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "H:mm"
+        dateFormatter.locale = Locale(identifier: "ru_RU") // TODO: remove hardcoded locale
+        dateFormatter.timeZone = .current
+        return dateFormatter.string(from: self)
+    }
+    
     // Example: 1970-12-18
     public func jsonDate() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = Date.date
         return dateFormatter.string(from: self)
+    }
+    
+    /// monday, 08 November 2019
+    public var dayWeekdaySymbolWithFullDate: String {
+        let calendar = Calendar.current
+        let dayLabel = calendar.standaloneWeekdaySymbols[calendar.component(.weekday, from: self) - 1]
+            .lowercased()
+        let dayNumber = dayMonthWithDots()
+        return dayLabel + ", " + dayNumber
+    }
+    
+    /// monday, 08 November 2019
+    public var dayWeekdaySymbolWithShrt: String {
+        let calendar = Calendar.current
+        let dayLabel = calendar.standaloneWeekdaySymbols[calendar.component(.weekday, from: self) - 1]
+            .lowercased()
+        let dayNumber = dayFullMonthAsStringYearWithSpaces()
+        return dayLabel + ", " + dayNumber
+    }
+    
+    // Example: 08 November 2019
+    public func dayFullMonthAsStringYearWithSpaces() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMMM yyyy"
+        dateFormatter.locale = Locale(identifier: "ru_RU") // TODO: remove hardcoded locale
+        return dateFormatter.string(from: self)
+    }
+    
+    /// Короткое название дня недели
+    public func shrtDayTitle() -> String {
+        guard let weekday = Calendar.current
+            .dateComponents([.weekday], from: self)
+            .weekday else {
+                return ""
+        }
+        var calendar = Calendar.current
+        calendar.locale = Locale(identifier: "ru_RU")
+        return calendar.shortWeekdaySymbols[weekday - 1].lowercased()
     }
     
     func isBefore(_ date: Date = Date()) -> Bool {
@@ -69,6 +115,6 @@ extension Date {
         let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
         let selfComponents = calendar.dateComponents([.year, .month, .day], from: self)
 
-        return calendar.date(from: selfComponents)! < calendar.date(from: dateComponents)!
+        return calendar.date(from: selfComponents)! <= calendar.date(from: dateComponents)!
     }
 }

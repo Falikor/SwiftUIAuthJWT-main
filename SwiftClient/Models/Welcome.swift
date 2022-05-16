@@ -10,10 +10,7 @@ struct Welcome: Decodable {
     var items: [Items?]
 }
 
-struct Items: Identifiable, Decodable {
-    var id: String? {
-        self.summary
-    }
+struct Items: Decodable {
     var summary: String?
     var start: Start?
     var end: End?
@@ -24,7 +21,7 @@ struct Items: Identifiable, Decodable {
     }
 }
 
-struct Start: Decodable {
+struct Start: Decodable, Hashable {
     var dateTime: String?
     var timeZone: String?
     

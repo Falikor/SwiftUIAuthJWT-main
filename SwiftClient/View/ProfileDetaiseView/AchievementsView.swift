@@ -32,26 +32,29 @@ struct AchievementsView: View {
         .padding()
             Spacer()
             Button(action: {
-                if inputText != "" {
+                if inputText != exampleVM.accounts?.achievements {
                     postViewModel.achievements = inputText
                     postViewModel.postAccount()
                 }
                 
             }) {
                     Text("Сохранить")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 20)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(20)
-            .padding(.horizontal, 20)
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)
         }
         .onTapGesture {
             hideKeyboard()
+        }
+        .onAppear {
+            inputText = exampleVM.accounts?.achievements ?? ""
         }
     }
     

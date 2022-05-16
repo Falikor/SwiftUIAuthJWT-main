@@ -19,13 +19,13 @@ class LoginViewModel: ObservableObject {
     func login() {
         self.state = .loading
         let defaults = UserDefaults.standard
-        
+        email = email.lowercased()
         Webservice().login(email: email, password: password) { result in
             switch result {
                 case .success(let token):
                     defaults.setValue(token, forKey: "jsonwebtoken")
                     DispatchQueue.main.async {
-                        self.isAuthenticated = true
+                        //self.isAuthenticated = true
                         self.token = token
                         
                         Webservice().getFistExit(token: token) { (result) in
@@ -34,8 +34,12 @@ class LoginViewModel: ObservableObject {
                                 DispatchQueue.main.async {
                                     //pdf
                                     self.isFistExet = Bool(isFistExet) ?? false
+                                    self.isAuthenticated = true
                                     print("success")
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                                     self.state = .loaded
+                                    }
+                                    
                                 }
                             case .failure(let error):
                                 print(error.localizedDescription)
@@ -46,7 +50,6 @@ class LoginViewModel: ObservableObject {
                     }
                 case .failure(let error):
                     print(error.localizedDescription)
-                    self.state = .loaded
             }
         }
     }

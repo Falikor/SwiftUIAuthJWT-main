@@ -56,13 +56,13 @@ struct HardSkillsView: View {
             
         }) {
                 Text("Сохранить")
+                .frame(minWidth: 0, maxWidth: .infinity)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding(.horizontal, 20)
         }
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .padding()
-        .foregroundColor(.white)
-        .background(Color.blue)
-        .cornerRadius(20)
-        .padding(.horizontal, 20)
         
     }
 }

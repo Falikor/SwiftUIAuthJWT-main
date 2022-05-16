@@ -40,6 +40,8 @@
 		CD5D6B4127EE0C5600709710 /* ExampleOfProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6B4027EE0C5600709710 /* ExampleOfProgress.swift */; };
 		CD5D6B4327EF19AB00709710 /* ExampleOfProgressViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6B4227EF19AB00709710 /* ExampleOfProgressViewModels.swift */; };
 		CD7F8F35281D220700335B6B /* DetailsExperienceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7F8F34281D220700335B6B /* DetailsExperienceView.swift */; };
+		CD8F4A7B282F8D8B000032F3 /* Sheet+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F4A7A282F8D8B000032F3 /* Sheet+Extensions.swift */; };
+		CD8F4A7D282F99F5000032F3 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8F4A7C282F99F5000032F3 /* ForgotPasswordView.swift */; };
 		CD98E4E827C65946003DF44D /* Welcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD98E4E727C65946003DF44D /* Welcome.swift */; };
 		CDA0F66A27CA7307006FAE33 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F66927CA7307006FAE33 /* Date+Extensions.swift */; };
 		CDA0F66E27CBB3EE006FAE33 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA0F66D27CBB3EE006FAE33 /* CalendarView.swift */; };
@@ -92,6 +94,8 @@
 		CD5D6B4027EE0C5600709710 /* ExampleOfProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleOfProgress.swift; sourceTree = "<group>"; };
 		CD5D6B4227EF19AB00709710 /* ExampleOfProgressViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleOfProgressViewModels.swift; sourceTree = "<group>"; };
 		CD7F8F34281D220700335B6B /* DetailsExperienceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsExperienceView.swift; sourceTree = "<group>"; };
+		CD8F4A7A282F8D8B000032F3 /* Sheet+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Sheet+Extensions.swift"; sourceTree = "<group>"; };
+		CD8F4A7C282F99F5000032F3 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
 		CD98E4E727C65946003DF44D /* Welcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Welcome.swift; sourceTree = "<group>"; };
 		CDA0F66927CA7307006FAE33 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		CDA0F66D27CBB3EE006FAE33 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 				CDAD3132280C519F00ADFA3A /* RootView.swift */,
 				CD2998EA2815B64500DF66BA /* StatefulScreenView.swift */,
 				CDBD929128291F4600DF2168 /* PdfView.swift */,
+				CD8F4A7A282F8D8B000032F3 /* Sheet+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 				CDAF12C62803688200D0CE69 /* HistoryView.swift */,
 				CD1873012806051600A91E09 /* RulseView.swift */,
 				CD5BFBF927E61DE1009D0ACD /* AfichaView.swift */,
+				CD8F4A7C282F99F5000032F3 /* ForgotPasswordView.swift */,
 				CDA0F66D27CBB3EE006FAE33 /* CalendarView.swift */,
 			);
 			path = View;
@@ -392,6 +398,7 @@
 				CDAD3133280C519F00ADFA3A /* RootView.swift in Sources */,
 				CD0CF3F9281EED4000EF8B1B /* OpenGallary.swift in Sources */,
 				CDBD929228291F4600DF2168 /* PdfView.swift in Sources */,
+				CD8F4A7B282F8D8B000032F3 /* Sheet+Extensions.swift in Sources */,
 				CD1872FE2805F18E00A91E09 /* Top.swift in Sources */,
 				CDBD92862823A45500DF2168 /* ExperienceView.swift in Sources */,
 				CDAC28D22801F200006E1FB5 /* History.swift in Sources */,
@@ -421,6 +428,7 @@
 				CD5BFC0027E629F1009D0ACD /* WebView.swift in Sources */,
 				CD5BFBF627E60E54009D0ACD /* ProfileView.swift in Sources */,
 				CD0CF3F7281EC99900EF8B1B /* DetailsPublicationsView.swift in Sources */,
+				CD8F4A7D282F99F5000032F3 /* ForgotPasswordView.swift in Sources */,
 				8D4167E22627E01400C03817 /* NotAuthorizedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -556,7 +564,7 @@
 				DEVELOPMENT_TEAM = 6L2236X539;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -581,7 +589,7 @@
 				DEVELOPMENT_TEAM = 6L2236X539;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SwiftClient/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

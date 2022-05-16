@@ -11,6 +11,7 @@ class AccountListViewModel: ObservableObject {
     
     @Published var welcome: [Items?] = []
     @Published var state: ScreenViewState = .loading
+    @Published var firstDate: String = ""
     
     func getCalendar(url: String) {
         Webservice().getCalendar(url: url) { (result) in
@@ -29,22 +30,14 @@ class AccountListViewModel: ObservableObject {
                                 return false
                             }
                         }
-                        self.welcome = result.sorted(by: { ferst, last in
-                            let dateFormatter = ISO8601DateFormatter()
-                            guard let tameF = ferst?.start?.dateTime else {return false}
-                            guard let tameL = ferst?.start?.dateTime else {return false}
-                            guard let dateFerst = dateFormatter.date(from: tameF) else {return false}
-                            guard let dateLast = dateFormatter.date(from: tameL) else {return false}
-                            if dateFerst.isBefore(dateLast) {
-                                return true
-                            } else {
-                                return false
-                            }
-                        })
+                        let resultArray = result.sorted { self.time(($1?.start?.dateTime)!) > self.time(($0?.start?.dateTime)!)}
+                        self.welcome = resultArray
+                        let str = resultArray.first??.start?.dateTime
+                        self.firstDate = str ?? ""
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+                        self.state = .loaded
+                        }
                     }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    self.state = .loaded
-                }
                 case .failure(let error):
                     print(error.localizedDescription)
             }
@@ -56,5 +49,22 @@ class AccountListViewModel: ObservableObject {
         dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ssZZZ"
         guard let date = dateFormatter.date(from: str) else { return Date()}
         return date
+    }
+}
+
+extension Date {
+    struct MonthDay: Comparable {
+        let month: Int
+        let day: Int
+        
+        init(date: Date) {
+            let comps = Calendar.current.dateComponents([.month,.day], from: date)
+            self.month = comps.month ?? 0
+            self.day = comps.day ?? 0
+        }
+        
+        static func <(lhs: MonthDay, rhs: MonthDay) -> Bool {
+            return (lhs.month < rhs.month || (lhs.month == rhs.month && lhs.day < rhs.day))
+        }
     }
 }

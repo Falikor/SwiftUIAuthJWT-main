@@ -30,7 +30,6 @@ struct CellProfileView: View {
                     .padding(5)
                     .font(.system(size: 14))
                     .foregroundColor(Color.black)
-                    .foregroundColor(Color.black)
             }
             Text(sububTitle)
                 .fixedSize(horizontal: false, vertical: true)
@@ -153,10 +152,14 @@ struct ProfileView: View {
                         isActivatedSoftPublic = true
                     } label: {
                         VStack(alignment: .leading) {
+                            Text(dataItem.journal ?? "Журнал")
+                                .foregroundColor(Color.gray)
+                                .font(.system(size: 13))
                             Text(dataItem.articleName ?? "Название статьи")
                                 .foregroundColor(Color.black)
                                 .font(.system(size: 16))
-                            Text(dataItem.authors ?? "Авторы")
+                            Divider()
+                            Text(exampleVM.getDataPublication(dto: dataItem)  ?? "")
                                 .foregroundColor(Color.gray)
                                 .font(.system(size: 13))
                         }.padding(7)
@@ -200,7 +203,8 @@ struct ProfileView: View {
                     Button {
                         exampleVM.getPdfResume(action: "send")
                     } label: {
-                        Image(systemName: "arrowshape.turn.up.backward.circle")
+                        ImagePdfView(nameImage: "send_pdf")
+                       // Image(systemName: "arrowshape.turn.up.backward.circle")
                     }
                     .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $exampleVM.sendPdf, onDismiss: {
@@ -216,10 +220,12 @@ struct ProfileView: View {
                             self.showImagePicker.toggle()
                         }
                     } label: {
-                        Image(uiImage: ((exampleVM.image ?? UIImage(named: "ilonMask"))!))
+                        Image(uiImage: ((exampleVM.image ?? UIImage(named: "person"))!))
                             .resizable()
+                            .scaledToFill()
                             .frame(width: 100, height: 100)
                             .cornerRadius(50)
+                            .overlay(Circle().stroke(Color.blue, lineWidth: 3))
                             .padding()
                     }
                     .buttonStyle(PlainButtonStyle())
@@ -241,7 +247,8 @@ struct ProfileView: View {
                     Button {
                         exampleVM.getPdfResume(action: "show")
                     } label: {
-                        Image(systemName: "doc.circle")
+                        ImagePdfView(nameImage: "look_pdf")
+                       // Image(systemName: "doc.circle")
                     }
                     .buttonStyle(PlainButtonStyle())
                     .sheet(isPresented: $exampleVM.showPdf, content: {

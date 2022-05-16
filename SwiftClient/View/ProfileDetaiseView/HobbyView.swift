@@ -32,26 +32,29 @@ struct HobbyView: View {
         .padding()
             Spacer()
             Button(action: {
-                if inputText != "" {
+                if inputText != exampleVM.accounts?.hobby {
                     postViewModel.hobby = inputText
                     postViewModel.postAccount()
                 }
                 
             }) {
                     Text("Сохранить")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .cornerRadius(20)
+                    .padding(.horizontal, 20)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .padding()
-            .foregroundColor(.white)
-            .background(Color.blue)
-            .cornerRadius(20)
-            .padding(.horizontal, 20)
         }
         .navigationBarTitle("")
         .navigationBarHidden(true)
         }
         .onTapGesture {
             hideKeyboard()
+        }
+        .onAppear {
+            inputText = exampleVM.accounts?.hobby ?? ""
         }
     }
     

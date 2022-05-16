@@ -8,9 +8,9 @@
 import Foundation
 
 public enum AllSkill: String, CaseIterable {
-    case COMMUNICATIONS = "КОММУНИКАЦИИ"
-    case CRITICAL_THINKING = "КРИТИЧЕСКОЕ МЫШЛЕНИЕ"
-    case PROJECT_MANAGEMENT = "УПРАВЛЕНИЕ ПРОЕКТАМИ"
+    case COMMUNICATIONS = "Коммуникация"
+    case CRITICAL_THINKING = "Критическое мышление"
+    case PROJECT_MANAGEMENT = "Управление проектами"
     
     case JAVA = "Java"
     case PYTHON = "Python"
@@ -22,9 +22,9 @@ public enum AllSkill: String, CaseIterable {
 }
 
 public enum SoftSkill: String, CaseIterable {
-    case COMMUNICATIONS = "КОММУНИКАЦИИ"
-    case CRITICAL_THINKING = "КРИТИЧЕСКОЕ МЫШЛЕНИЕ"
-    case PROJECT_MANAGEMENT = "УПРАВЛЕНИЕ ПРОЕКТАМИ"
+    case COMMUNICATIONS = "Коммуникация"
+    case CRITICAL_THINKING = "Критическое мышление"
+    case PROJECT_MANAGEMENT = "Управление проектами"
     
     
     func stringEnum(skills: String) -> String {

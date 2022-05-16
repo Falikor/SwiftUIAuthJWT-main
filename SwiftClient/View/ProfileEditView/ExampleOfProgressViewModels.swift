@@ -42,7 +42,23 @@ class ExampleOfProgressViewModels: ObservableObject {
         dateFormatter.dateFormat = "yyyy-MM-dd"
         guard let dateStart = dateFormatter.date(from: start) else { return nil}
         guard let dateEnd = dateFormatter.date(from: end) else { return nil}
-        return "С \(dateStart.dayMonthWithDots()) по \(dateEnd.dayMonthWithDots())"
+        return "С \(dateStart.dayMonthShortYearWithDots()) по \(dateEnd.dayMonthShortYearWithDots())"
+    }
+    
+    func getDataPublication(dto: PublicationDTO?) -> String? {
+        guard let start = dto?.publicationDate else { return nil}
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let dateStart = dateFormatter.date(from: start) else { return nil}
+        return "Опубликована \(dateStart.dayMonthShortYearWithDots())"
+    }
+    
+    func stingDateFromString(str: String?) -> String? {
+        guard let str = str else { return nil}
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let dateString = dateFormatter.date(from: str) else { return nil}
+        return "\(dateString.dayMonthShortYearWithDots())"
     }
     
     func getSoftSkils() -> [AllSkill] {

@@ -41,3 +41,19 @@ struct ActivityViewController: UIViewControllerRepresentable {
  func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<ActivityViewController>) {}
 
 }
+
+struct ImagePdfView: View {
+    var nameImage: String = "send_pdf"
+    var body: some View {
+        ZStack {
+            Image(uiImage: UIImage(named: "ellipse_pdf")!)
+            Image(uiImage: UIImage(named: nameImage)!)
+        }
+    }
+}
+
+struct ImagePdfView_Previews: PreviewProvider {
+    static var previews: some View {
+        ImagePdfView()
+    }
+}

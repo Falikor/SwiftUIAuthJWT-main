@@ -18,7 +18,8 @@ struct CustomHistoryRowView: View {
                 Text(date)
             }
             Spacer()
-            Text("\(number)")
+            Text("+ \(number)")
+                .foregroundColor(Color.green)
         }
     }
 }
@@ -28,7 +29,7 @@ struct HistoryView: View {
     var body: some View {
         List {
             ForEach(exampleVM.history , id: \.!.id) { (history) in
-                CustomHistoryRowView(title: history?.description ?? "", date: history?.date ?? "", number: history?.value ?? 0)
+                CustomHistoryRowView(title: history?.description ?? "", date: exampleVM.stingDateFromString(str: history?.date) ?? "", number: history?.value ?? 0)
             }
         }
         .onAppear {

@@ -27,15 +27,27 @@ struct PublicationView: View {
                     .padding(10)
                 TextField("\(publications.journal ?? "Название журнал")", text: $journal)
                     .padding(10)
-                DatePicker("\(publications.publicationDate ?? "Дата публикации")", selection: $publicationDate, displayedComponents: .date)
+                DatePicker("\(exampleVM.stingDateFromString(str: publications.publicationDate) ?? "Дата публикации")", selection: $publicationDate, displayedComponents: .date)
                     .padding(10)
-                TextField("\(publications.publicationDate ?? "URL сылка")", text: $link)
+                TextField("\(publications.link ?? "URL сылка")", text: $link)
                     .padding(10)
             
             }
             .padding(.horizontal, 30)
             .onTapGesture {
                 hideKeyboard()
+            }
+            .onAppear {
+                articleName = publications.articleName ?? ""
+                authors = publications.authors ?? ""
+                journal = publications.journal ?? ""
+                link = publications.link ?? ""
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                guard let publicationDateString = publications.publicationDate else { return }
+                guard let datePublic = dateFormatter.date(from: publicationDateString) else { return }
+                publicationDate = datePublic
             }
         
         Spacer()
@@ -64,13 +76,13 @@ struct PublicationView: View {
             
         }) {
                 Text("Сохранить")
+                .frame(minWidth: 0, maxWidth: .infinity)
+                .padding()
+                .foregroundColor(.white)
+                .background(Color.blue)
+                .cornerRadius(20)
+                .padding(.horizontal, 20)
         }
-        .frame(minWidth: 0, maxWidth: .infinity)
-        .padding()
-        .foregroundColor(.white)
-        .background(Color.blue)
-        .cornerRadius(20)
-        .padding(.horizontal, 20)
         
     }
 }

@@ -37,7 +37,8 @@ struct TabViewApp: View {
             
             NavigationView {
                 CalendarView()
-                    .navigationTitle("Календарь")
+                    .navigationBarHidden(true)
+                  //  .navigationTitle("Календарь")
             }
             .tabItem {
                 Image(uiImage: UIImage(named: "calendr")!)

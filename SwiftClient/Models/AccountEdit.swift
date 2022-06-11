@@ -15,6 +15,7 @@ struct AccountEdit: Codable {
     var workExperience: [WorkExperience]?
     var listOfSoftSkills: [ListOfSoftSkill]?
     var listOfHardSkills: [ListOfHardSkill]?
+    var projectExperience: [ProjectExperience]?
 }
 
 // MARK: - ListOfHardSkill
@@ -45,4 +46,10 @@ struct WorkExperience: Codable, Equatable {
     var company: String?
     var beginningOfWork: String?
     var endingOfWork: String?
+}
+
+// MARK: - ProjectExperience
+struct ProjectExperience: Codable, Equatable {
+    let responsibilities, project, results, position: String?
+    let beginning, ending: String?
 }

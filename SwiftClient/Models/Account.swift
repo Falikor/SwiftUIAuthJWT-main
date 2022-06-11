@@ -21,6 +21,7 @@ struct Account: Decodable {
     var listOfSoftSkillsDTOList: [ListOfSoftSkillsDTOList]?
     var listOfHardSkillsDTOList: [ListOfHardSkillsDTOList]?
     let userDTO: UserDTO?
+    var projectExperienceDTO: [ProjectExperienceDTO]?
 }
 
 // MARK: - ListOfHardSkillsDTOList
@@ -55,4 +56,11 @@ struct WorkExperienceDTO: Decodable {
     let id: Int?
     let position, responsibilities, company, beginningOfWork: String?
     let endingOfWork: String?
+}
+
+// MARK: - ProjectExperienceDTO
+struct ProjectExperienceDTO: Decodable {
+    let id: Int?
+    let position, responsibilities, project, results: String?
+    let beginning, ending: String?
 }

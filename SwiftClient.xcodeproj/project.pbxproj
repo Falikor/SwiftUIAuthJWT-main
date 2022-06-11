@@ -55,6 +55,7 @@
 		CDBD928A2823E5E800DF2168 /* SofttSkillsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD92892823E5E800DF2168 /* SofttSkillsView.swift */; };
 		CDBD928C2823E84600DF2168 /* PublicationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD928B2823E84600DF2168 /* PublicationView.swift */; };
 		CDBD929228291F4600DF2168 /* PdfView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDBD929128291F4600DF2168 /* PdfView.swift */; };
+		CDE5D39C284CCFB3009E43E5 /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDE5D39B284CCFB3009E43E5 /* ProjectView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -109,6 +110,7 @@
 		CDBD92892823E5E800DF2168 /* SofttSkillsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SofttSkillsView.swift; sourceTree = "<group>"; };
 		CDBD928B2823E84600DF2168 /* PublicationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublicationView.swift; sourceTree = "<group>"; };
 		CDBD929128291F4600DF2168 /* PdfView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PdfView.swift; sourceTree = "<group>"; };
+		CDE5D39B284CCFB3009E43E5 /* ProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectView.swift; sourceTree = "<group>"; };
 		DC1105D467863858B9A4BB4A /* libPods-SwiftClient.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SwiftClient.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -279,6 +281,7 @@
 				CDBD92802822F97500DF2168 /* HobbyView.swift */,
 				CDBD9283282303EC00DF2168 /* AchievementsView.swift */,
 				CDBD92852823A45500DF2168 /* ExperienceView.swift */,
+				CDE5D39B284CCFB3009E43E5 /* ProjectView.swift */,
 				CDBD92872823D3A600DF2168 /* HardSkillsView.swift */,
 				CDBD92892823E5E800DF2168 /* SofttSkillsView.swift */,
 				CDBD928B2823E84600DF2168 /* PublicationView.swift */,
@@ -423,6 +426,7 @@
 				CD5BFBF227E5D2F9009D0ACD /* Route.swift in Sources */,
 				CD5D6B4127EE0C5600709710 /* ExampleOfProgress.swift in Sources */,
 				CDBD928C2823E84600DF2168 /* PublicationView.swift in Sources */,
+				CDE5D39C284CCFB3009E43E5 /* ProjectView.swift in Sources */,
 				CD5BFBF427E60878009D0ACD /* TabViewApp.swift in Sources */,
 				CD98E4E827C65946003DF44D /* Welcome.swift in Sources */,
 				CD5BFC0027E629F1009D0ACD /* WebView.swift in Sources */,

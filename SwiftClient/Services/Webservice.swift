@@ -76,6 +76,7 @@ class Webservice {
             
         }.resume()
     }
+    
     // MARK: - Google получение календаря
     func getCalendar(url: String, completion: @escaping (Result<Welcome, NetworkError>) -> Void) {
         
@@ -140,7 +141,7 @@ class Webservice {
     // MARK: - Получение профиля
     func getPostAccount(token: String, completion: @escaping (Result<Account, NetworkError>) -> Void) {
         
-        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/my") else {
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/my/v2") else {
             completion(.failure(.invalidURL))
             return
         }
@@ -194,9 +195,35 @@ class Webservice {
         }.resume()
     }
     
+    // MARK: - Получение истории ВИШенок
+    func getPostHistoryTop(token: String, id: Int, completion: @escaping (Result<[History], NetworkError>) -> Void) {
+        
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/cherries/history/\(id)") else {
+            completion(.failure(.invalidURL))
+            return
+        }
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "GET"
+        request.addValue("\(token)", forHTTPHeaderField: "Authorization")
+
+
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            guard let data = data, error == nil else {
+                completion(.failure(.noData))
+                return
+            }
+            guard let history = try? JSONDecoder().decode([History].self, from: data) else {
+                completion(.failure(.decodingError))
+                return
+            }
+            completion(.success(history))
+            
+        }.resume()
+    }
+    
     // MARK: - Получение Top
     func getPostTop(token: String, completion: @escaping (Result<[Top], NetworkError>) -> Void) {
-        
         guard let url = URL(string: "http://193.17.52.134:80/api/v1/cherries/top5") else {
             completion(.failure(.invalidURL))
             return
@@ -254,7 +281,7 @@ class Webservice {
     
     func postAccount(accountsEdit: AccountEdit, token: String, completion: @escaping (Result<String, NetworkError>) -> Void) {
         
-        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/edit") else {
+        guard let url = URL(string: "http://193.17.52.134:80/api/v1/resume/edit/v2") else {
             completion(.failure(.invalidURL))
             return
         }

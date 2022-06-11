@@ -8,12 +8,13 @@
 import Foundation
 
 struct Top: Decodable, Equatable {
+    let id: Int?
     let email, firstName, lastName: String?
     let cherriesTop: Int?
     let studyGroupName: String?
     let courseNumber: Int?
     let specializationName: String?
-    let photoLink: String
+    let photoLink: String?
  }
 
 

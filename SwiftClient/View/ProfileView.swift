@@ -54,10 +54,17 @@ struct ProfileView: View {
     @State var isActivatedSoftSkills: Bool = false
     @State var isActivatedSoftPublic: Bool = false
     @State var isActivatedAchivment: Bool = false
+    @State var isActivatedProjict: Bool = false
     @State var showImagePicker: Bool = false
     @State var image: Image?
     @State var selectedItem: WorkExperienceDTO = WorkExperienceDTO.init(id: nil, position: nil, responsibilities: nil, company: nil, beginningOfWork: nil, endingOfWork: nil)
     @State var selectedItemPublisht: PublicationDTO = PublicationDTO.init(id: nil, link: nil, authors: nil, articleName: nil, publicationDate: nil, journal: nil)
+    @State var selectedItemProject: ProjectExperienceDTO = ProjectExperienceDTO.init(id: nil, position: nil, responsibilities: nil, project: nil, results: nil, beginning: nil, ending: nil)
+    
+    init() {
+            UITableView.appearance().sectionFooterHeight = 4
+            UITableView.appearance().sectionHeaderHeight = 4
+          }
     
     var body: some View {
         List {
@@ -114,6 +121,54 @@ struct ProfileView: View {
                 HStack {
                     Image(uiImage: UIImage(named: "add_plue")!)
                     Text("Добавить место работы")
+                }
+            }
+            .padding(.horizontal, 30)
+            
+            // MARK: Проектная деятельность
+            HStack(spacing: 5) {
+                Image(uiImage: UIImage(named: "icon_profil")!)
+                Text("Проектная деятельность")
+                    .font(.headline)
+                    .font(.system(size: 16))
+            }
+                ForEach(exampleVM.accounts?.projectExperienceDTO ??
+                        [ProjectExperienceDTO.init(
+                            id: nil, position: nil,
+                            responsibilities: nil,
+                            project: nil,
+                            results: nil,
+                            beginning: nil,
+                            ending: nil)], id: \.position) { dataItem in
+                Button {
+                    selectedItemProject = dataItem
+                    isActivatedProjict = true
+                } label: {
+                    VStack(alignment: .leading) {
+                        Text(dataItem.project ?? "Название проекта")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 13))
+                        Text(dataItem.position ?? "Роль в проекте")
+                            .foregroundColor(Color.black)
+                            .font(.system(size: 16))
+                        Divider()
+                        Text(exampleVM.getDataProjict(dto: dataItem) ?? "")
+                            .foregroundColor(Color.gray)
+                            .font(.system(size: 13))
+                    }.padding(7)
+                }
+                            }.onDelete(perform: deleteProjict)
+                            .background(
+                                NavigationLink(destination:
+                                                ProjectView(projectExperienceDTO: selectedItemProject, exampleVM: exampleVM),
+                                               isActive: $isActivatedProjict) {EmptyView()}.opacity(0)
+                            )
+                Button {
+                    exampleVM.accounts?.projectExperienceDTO?.append(ProjectExperienceDTO.init(id: nil, position: nil, responsibilities: nil, project: nil, results: nil, beginning: nil, ending: nil))
+            } label: {
+                HStack {
+                    Image(uiImage: UIImage(named: "add_plue")!)
+                    Text("Добавить проект")
                 }
             }
             .padding(.horizontal, 30)
@@ -338,6 +393,16 @@ struct ProfileView: View {
         postViewModel.publication.removeAll()
         for i in resultArray {
             postViewModel.publication.append(Publication.init(link: i.link, authors: i.authors, articleName: i.articleName, publicationDate: i.publicationDate, journal: i.journal))
+        }
+        postViewModel.postAccount()
+    }
+    
+    private func deleteProjict(with indexSet: IndexSet) {
+        indexSet.forEach { exampleVM.accounts?.projectExperienceDTO?.remove(at: $0) }
+        guard let resultArray = exampleVM.accounts?.projectExperienceDTO else { return }
+        postViewModel.projectExperience.removeAll()
+        for i in resultArray {
+            postViewModel.projectExperience.append(ProjectExperience.init(responsibilities: i.responsibilities, project: i.project, results: i.results, position: i.position, beginning: i.beginning, ending: i.ending))
         }
         postViewModel.postAccount()
     }

@@ -53,6 +53,16 @@ class ExampleOfProgressViewModels: ObservableObject {
         return "Опубликована \(dateStart.dayMonthShortYearWithDots())"
     }
     
+    func getDataProjict(dto: ProjectExperienceDTO?) -> String? {
+        guard let start = dto?.beginning else { return nil}
+        guard let end = dto?.ending else { return nil}
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        guard let dateStart = dateFormatter.date(from: start) else { return nil}
+        guard let dateEnd = dateFormatter.date(from: end) else { return nil}
+        return "С \(dateStart.dayMonthShortYearWithDots()) по \(dateEnd.dayMonthShortYearWithDots())"
+    }
+    
     func stingDateFromString(str: String?) -> String? {
         guard let str = str else { return nil}
         let dateFormatter = DateFormatter()
@@ -74,7 +84,25 @@ class ExampleOfProgressViewModels: ObservableObject {
         return tagsTaps
     }
 
-    
+    func getPostHistoryTop(id: Int) {
+        
+        let defaults = UserDefaults.standard
+        guard let token = defaults.string(forKey: "jsonwebtoken") else {
+            return
+        }
+        
+        Webservice().getPostHistoryTop(token: token, id: id) { (result) in
+            switch result {
+                case .success(let history):
+                    DispatchQueue.main.async {
+                        self.history = history
+                    }
+                case .failure(let error):
+                    print(error.localizedDescription)
+            }
+        }
+        
+    }
     func getPostHistory() {
         
         let defaults = UserDefaults.standard

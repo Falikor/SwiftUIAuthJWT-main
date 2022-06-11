@@ -16,6 +16,7 @@ class ProgressViewModels: ObservableObject {
     //Опыт работы
     @Published var workExperience: [WorkExperience] = [WorkExperience.init()]
     @Published var publication: [Publication] = [Publication.init()]
+    @Published var projectExperience: [ProjectExperience] = [ProjectExperience.init(responsibilities: nil, project: nil, results: nil, position: nil, beginning: nil, ending: nil)]
     @Published var position: String = ""
     var responsibilities: String = ""
     var company: String = ""
@@ -73,6 +74,7 @@ class ProgressViewModels: ObservableObject {
         var achiev: String? = nil
         var work: [WorkExperience]? = nil
         var publict: [Publication]? = nil
+        var project: [ProjectExperience]? = nil
         if hobby != "" {
             hobbySend = hobby
         }
@@ -85,9 +87,12 @@ class ProgressViewModels: ObservableObject {
         if publication.first?.articleName != nil {
             publict = publication
         }
+        if projectExperience.first?.project != nil {
+            project = projectExperience
+        }
         let hardList = tagHard()
         let softList = tagSoft()
-        let accountsEdit = AccountEdit(hobby: hobbySend, achievements: achiev, publication: publict, workExperience: work, listOfSoftSkills: softList, listOfHardSkills: hardList)
+        let accountsEdit = AccountEdit(hobby: hobbySend, achievements: achiev, publication: publict, workExperience: work, listOfSoftSkills: softList, listOfHardSkills: hardList, projectExperience: project)
         
         let defaults = UserDefaults.standard
         guard let token = defaults.string(forKey: "jsonwebtoken") else {

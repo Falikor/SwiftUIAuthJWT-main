@@ -29,35 +29,35 @@ struct CalendarView: View {
                 }
                 .onChange(of: selectedColor) { value in
                     switch value {
-                    case "ШАД-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad111@rut.digital/events?key=AIzaSyAlX_gpRSI_SB4FzrRDuXWC3wkhR8_8SyI")
+                    case "ШАД-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad111@rut.digital/events?maxResults=9000&key=AIzaSyAlX_gpRSI_SB4FzrRDuXWC3wkhR8_8SyI")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШАД-112": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad112@rut.digital/events?key=AIzaSyCdbVwirC2irWFIcCXPiXtL-a-fE6vPkIo")
+                    case "ШАД-112": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad112@rut.digital/events?maxResults=9000&key=AIzaSyCdbVwirC2irWFIcCXPiXtL-a-fE6vPkIo")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШАД-113": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad113@rut.digital/events?key=AIzaSyB0AS7bXi3O_Duzl8yM_l6WWFoysvAOkF8")
+                    case "ШАД-113": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad113@rut.digital/events?maxResults=9000&key=AIzaSyB0AS7bXi3O_Duzl8yM_l6WWFoysvAOkF8")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШМС-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shms111@rut.digital/events?key=AIzaSyCKOmSuayEtvOD7pfUciLWYy_hqtXkPB_o")
+                    case "ШМС-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shms111@rut.digital/events?maxResults=9000&key=AIzaSyCKOmSuayEtvOD7pfUciLWYy_hqtXkPB_o")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШТД-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shtd111@rut.digital/events?key=AIzaSyAzGGcUW_0IfAeF3AHYKohagEmdNEF1W8Y")
+                    case "ШТД-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shtd111@rut.digital/events?maxResults=9000&key=AIzaSyAzGGcUW_0IfAeF3AHYKohagEmdNEF1W8Y")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШТА-151": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shta151@rut.digital/events?key=AIzaSyCdBUP5uTrAJA_lpOkmoyAyHcSv9yeH3KM")
+                    case "ШТА-151": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shta151@rut.digital/events?maxResults=9000&key=AIzaSyCdBUP5uTrAJA_lpOkmoyAyHcSv9yeH3KM")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШУЦ-151": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shuc151@rut.digital/events?key=AIzaSyA3jchtS5XM25D6bDolZG_7DeVinkSYSmw")
+                    case "ШУЦ-151": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shuc151@rut.digital/events?maxResults=9000&key=AIzaSyA3jchtS5XM25D6bDolZG_7DeVinkSYSmw")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
-                    case "ШИМ-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shim111@rut.digital/events?key=AIzaSyBwJlPlWaMRAcHL89dBnCHSSQUA-M1ji-Y")
+                    case "ШИМ-111": accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shim111@rut.digital/events?maxResults=9000&key=AIzaSyBwJlPlWaMRAcHL89dBnCHSSQUA-M1ji-Y")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             dateTodat = accountListVM.time(accountListVM.firstDate)
                         }
@@ -117,7 +117,7 @@ struct CalendarView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onAppear {
-            accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad111@rut.digital/events?key=AIzaSyAlX_gpRSI_SB4FzrRDuXWC3wkhR8_8SyI")
+            accountListVM.getCalendar(url: "https://www.googleapis.com/calendar/v3/calendars/shad111@rut.digital/events?maxResults=9000&key=AIzaSyAlX_gpRSI_SB4FzrRDuXWC3wkhR8_8SyI")
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 dateTodat = accountListVM.time(accountListVM.firstDate)
             }

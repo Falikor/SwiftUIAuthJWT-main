@@ -14,19 +14,25 @@ struct CustomRowView: View {
     var number: Int?
     @ObservedObject var imageLoader: ImageLoader
     @State var image: UIImage = UIImage()
+    @State private var showHistori = false
     var count: Int
+    var id: Int
 
-    init(withURL url: String?, title: String?, specializationName: String?, studyGroupName: String?, number: Int?, count: Int) {
+    init(withURL url: String?, title: String?, specializationName: String?, studyGroupName: String?, number: Int?, count: Int, id: Int) {
         imageLoader = ImageLoader(urlString: url ?? "")
         self.title = title
         self.specializationName = specializationName
         self.studyGroupName = studyGroupName
         self.number = number
         self.count = count
+        self.id = id
     }
 
     var body: some View {
         VStack(alignment: .leading) {
+            Button(action: {
+                showHistori = true
+                    }) {
             HStack {
                 Text("#\(count)")
                     .font(.system(size: 16))
@@ -54,6 +60,15 @@ struct CustomRowView: View {
                 }
                 .padding(.horizontal, 10)
             }
+                    }
+                    .sheetWithDetents(
+                                isPresented: $showHistori,
+                                detents: [.medium(),.large()]
+                            ) {
+                                print("The sheet has been dismissed")
+                            } content: {
+                                HistoryView(id: id)
+                            }
             Text(specializationName ?? "")
                 .font(.system(size: 13))
                 .fixedSize(horizontal: false, vertical: true)
@@ -122,7 +137,7 @@ struct VichenView: View {
                                 ) {
                                     print("The sheet has been dismissed")
                                 } content: {
-                                    HistoryView()
+                                    HistoryView(id: exampleVM.accounts?.id ?? 1)
                                 }
 
                 Button(action: {
@@ -157,13 +172,14 @@ struct VichenView: View {
             }
             Spacer()
             List (exampleVM.top , id: \.!.email) { top in
-                CustomRowView(
-                    withURL: top!.photoLink, title: exampleVM.fullNameTop(top: top),
-                    specializationName: top?.specializationName,
-                    studyGroupName: top?.studyGroupName,
-                    number: top?.cherriesTop,
-                    count: (exampleVM.top.firstIndex(of: top) ?? 0) + 1
-                )
+                            CustomRowView(
+                                withURL: top!.photoLink, title: exampleVM.fullNameTop(top: top),
+                                specializationName: top?.specializationName,
+                                studyGroupName: top?.studyGroupName,
+                                number: top?.cherriesTop,
+                                count: (exampleVM.top.firstIndex(of: top) ?? 0) + 1,
+                                id: top?.id ?? 0
+                            )
             }
             .listStyle(.plain)
         }

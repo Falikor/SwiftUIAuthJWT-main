@@ -25,6 +25,7 @@ struct CustomHistoryRowView: View {
 }
 
 struct HistoryView: View {
+    var id: Int?
     @StateObject private var exampleVM = ExampleOfProgressViewModels()
     var body: some View {
         List {
@@ -33,13 +34,11 @@ struct HistoryView: View {
             }
         }
         .onAppear {
-            exampleVM.getPostHistory()
+            if let id = id {
+                exampleVM.getPostHistoryTop(id: id)
+            } else {
+                exampleVM.getPostHistory()
+            }
         }
-    }
-}
-
-struct HistoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        HistoryView()
     }
 }
